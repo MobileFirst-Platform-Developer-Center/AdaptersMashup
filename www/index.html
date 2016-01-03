@@ -17,7 +17,7 @@ limitations under the License.
 
 <html>
     <head>
-        <meta charset="UTF-8">  
+        <meta charset="UTF-8">
         <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: gap: https://ssl.gstatic.com 'unsafe-eval'; style-src 'self' 'unsafe-inline'; media-src *">
         <meta name="format-detection" content="telephone=no">
         <meta name="msapplication-tap-highlight" content="no">
@@ -26,18 +26,22 @@ limitations under the License.
         <title>Adapters Mashup</title>
     </head>
     <body>
-        <div id="header">
-			<h1>CityWeather</h1>
-		</div>			
-		
-        <div id="wrapper">
-			<label for="citiesList">Select city: </label>
-			<select id="citiesList"></select>
-			<div id="info"></div>
-		</div>		
-        
-        <script type="text/javascript" src="cordova.js"></script>
-        <script type="text/javascript" src="js/main.js"></script>
-        <script type="text/javascript" src="js/index.js"></script>
+      <div id="header">
+        <h1 id="AppTitle">CityWeather <span id="subTitle"></span></h1>
+      </div>
+      <div id="wrapper">
+        <h4 id="subTitle"></h4>
+        <label for="citiesList">Select city: </label>
+        <select id="citiesList"></select>
+        <div id="info"></div>
+        <div align="center">
+          <button id="JsToJsButton" class="AdapterTypeButton" onclick="getCitiesList_JsToJs();">JS adapter -> JS adapter</button>
+          <button id="JavaToJsButton" class="AdapterTypeButton" onclick="getCitiesList_JavaToJs();">Java adapter -> JS adapter</button>
+          <button id="JavaToJavaButton" class="AdapterTypeButton" onclick="getCitiesList_JavaToJava();">Java adapter -> Java adapter</button>
+        </div>
+    </div>
+
+    <script src="cordova.js"></script>
+    <script src="js/index.js"></script>
     </body>
 </html>
