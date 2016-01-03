@@ -74,14 +74,15 @@ app.initialize();
 // JS adapter -> JS adapter
 //***************************************************
 function getCitiesList_JsToJs() {
-	//busyIndicator.show();
+  alert("getCitiesList_JsToJs");
+  //busyIndicator.show();
   window.plugins.spinnerDialog.show(null, "Loading...");
-	var resourceRequest = new WLResourceRequest("/adapters/getCitiesListJS/getCitiesWeather", WLResourceRequest.GET, 30000);
-	resourceRequest.send().then(
-		getCitiesListSuccess,
-		getCitiesListFailure
-	);
-	switchButtonsFocus("JsToJsButton");
+  var resourceRequest = new WLResourceRequest("/adapters/getCitiesListJS/getCitiesWeather", WLResourceRequest.GET, 30000);
+  resourceRequest.send().then(
+    getCitiesListSuccess,
+    getCitiesListFailure
+  );
+  switchButtonsFocus("JsToJsButton");
 }
 
 //***************************************************
