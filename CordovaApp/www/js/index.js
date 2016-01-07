@@ -13,7 +13,7 @@
 * See the License for the specific language governing permissions and
 * limitations under the License.
 */
-var busyIndicator = null;
+//var busyIndicator = null;
 var citiesList = null;
 
 var Messages = {
@@ -30,8 +30,7 @@ var wlInitOptions = {
 // Called automatically after MFP framework initialization by WL.Client.init(wlInitOptions).
 function wlCommonInit(){
   //busyIndicator = new WL.BusyIndicator("AppBody"); -- Removed in 8.0!!!!!!!!!!
-  $('#citiesList').change(citySelectionChange);
-  getCitiesList_JsToJs();
+  //$('#citiesList').change(citySelectionChange);
 
   document.getElementById('app_version').textContent = WL.Client.getAppProperty("APP_VERSION");
   document.getElementById('mobilefirst').setAttribute('style', 'display:block;');
@@ -76,12 +75,11 @@ app.initialize();
 function getCitiesList_JsToJs() {
   alert("getCitiesList_JsToJs");
   //busyIndicator.show();
-  window.plugins.spinnerDialog.show(null, "Loading...");
-  var resourceRequest = new WLResourceRequest("/adapters/getCitiesListJS/getCitiesWeather", WLResourceRequest.GET, 30000);
+  /*var resourceRequest = new WLResourceRequest("/adapters/getCitiesListJS/getCitiesWeather", WLResourceRequest.GET, 30000);
   resourceRequest.send().then(
     getCitiesListSuccess,
     getCitiesListFailure
-  );
+  );*/
   switchButtonsFocus("JsToJsButton");
 }
 
@@ -90,12 +88,11 @@ function getCitiesList_JsToJs() {
 //***************************************************
 function getCitiesList_JavaToJs() {
 	//busyIndicator.show();
-  window.plugins.spinnerDialog.show(null, "Loading...");
-	var resourceRequest = new WLResourceRequest("/adapters/getCitiesListJavaToJs/getCitiesList_JavaToJs", WLResourceRequest.GET, 30000);
+	/*var resourceRequest = new WLResourceRequest("/adapters/getCitiesListJavaToJs/getCitiesList_JavaToJs", WLResourceRequest.GET, 30000);
 	resourceRequest.send().then(
 		getCitiesListSuccess,
 		getCitiesListFailure
-	);
+	);*/
 	switchButtonsFocus("JavaToJsButton");
 }
 
@@ -104,12 +101,11 @@ function getCitiesList_JavaToJs() {
 //***************************************************
 function getCitiesList_JavaToJava() {
 	//busyIndicator.show();
-  window.plugins.spinnerDialog.show(null, "Loading...");
-	var resourceRequest = new WLResourceRequest("/adapters/getCitiesListJava/getCitiesList_JavaToJava", WLResourceRequest.GET, 30000);
+	/*var resourceRequest = new WLResourceRequest("/adapters/getCitiesListJava/getCitiesList_JavaToJava", WLResourceRequest.GET, 30000);
 	resourceRequest.send().then(
 		getCitiesListSuccess,
 		getCitiesListFailure
-	);
+	);*/
 	switchButtonsFocus("JavaToJavaButton");
 }
 
@@ -141,7 +137,7 @@ function getCitiesListSuccess(response) {
 //***************************************************
 function getCitiesListFailure(response) {
 	WL.Logger.debug("CityWeather::getCitiesListFailure");
-	busyIndicator.hide();
+	//busyIndicator.hide();
 	WL.SimpleDialog.show("CityWeather",
 			"Can't get cities list. Check database connection", [ {
 				text : 'Reload app',
@@ -159,7 +155,7 @@ function fillCitiesList(){
 		var elem = $("<option/>").html(citiesList[i].city);
 		$('#citiesList').append(elem);
 	}
-	busyIndicator.hide();
+	//busyIndicator.hide();
 	citySelectionChange();
 }
 
@@ -219,3 +215,4 @@ function switchButtonsFocus(ButtonId){
     		$('#JavaToJsButton').removeClass("AdapterTypeButtonSelected").addClass("AdapterTypeButton");
     	}
     }
+}
