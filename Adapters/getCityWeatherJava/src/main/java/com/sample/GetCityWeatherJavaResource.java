@@ -42,9 +42,9 @@ import org.xml.sax.SAXException;
 @Path("/")
 public class GetCityWeatherJavaResource {
 	/*
-	 * For more info on JAX-RS see https://jsr311.java.net/nonav/releases/1.1/index.html
+	 * For more info on JAX-RS see https://jax-rs-spec.java.net/nonav/2.0-rev-a/apidocs/index.html
 	 */
-		
+
 	//Define logger (Standard java.util.Logger)
 	static Logger logger = Logger.getLogger(GetCityWeatherJavaResource.class.getName());
 
@@ -58,13 +58,13 @@ public class GetCityWeatherJavaResource {
 
 	private String execute(HttpUriRequest req, HttpServletResponse resultResponse) throws ClientProtocolException, IOException, IllegalStateException, SAXException {
 		String strOut = null;
-		HttpResponse RSSResponse = client.execute(host, req); 
+		HttpResponse RSSResponse = client.execute(host, req);
 		ServletOutputStream os = resultResponse.getOutputStream();
-		if (RSSResponse.getStatusLine().getStatusCode() == HttpStatus.SC_OK){	
+		if (RSSResponse.getStatusLine().getStatusCode() == HttpStatus.SC_OK){
 			resultResponse.addHeader("Content-Type", "application/json");
 			String json = XML.toJson(RSSResponse.getEntity().getContent());
 			os.write(json.getBytes(Charset.forName("UTF-8")));
-			
+
 		}else{
 			resultResponse.setStatus(RSSResponse.getStatusLine().getStatusCode());
 			RSSResponse.getEntity().getContent().close();
@@ -81,5 +81,5 @@ public class GetCityWeatherJavaResource {
 	public String get(@Context HttpServletResponse response, @QueryParam("cityId") String cityId) throws ClientProtocolException, IOException, IllegalStateException, SAXException {
 		String returnValue = execute(new HttpGet("/forecastrss?w="+ cityId +"&u=c"), response);
 		return returnValue;
-	}	
+	}
 }
