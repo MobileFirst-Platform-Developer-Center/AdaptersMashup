@@ -37,13 +37,9 @@ function getCitiesList() {
 }
 
 function getCityWeather(woeid){
-	//var result = WL.Server.invokeProcedure({
 		return WL.Server.invokeProcedure({
 		adapter : 'getCityWeatherJS',
 		procedure : 'getYahooWeather',
 		parameters : [woeid]
 	});
-
-	//WL.Logger.warn(JSON.stringify(result));
-	//return result;
 }

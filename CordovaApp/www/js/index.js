@@ -54,13 +54,6 @@ var app = {
     // Update the DOM on a received event.
     receivedEvent: function(id) {
         var parentElement = document.getElementById(id);
-        //var listeningElement = parentElement.querySelector('.listening');
-        //var receivedElement = parentElement.querySelector('.received');
-
-        //listeningElement.setAttribute('style', 'display:none;');
-        //receivedElement.setAttribute('style', 'display:block;');
-
-        //console.log('Received Event: ' + id);
     }
 };
 
@@ -88,7 +81,7 @@ function getCitiesList_JavaToJs() {
 		getCitiesListSuccess,
 		getCitiesListFailure
 	);*/
-	switchButtonsFocus("JavaToJsButton");
+	//switchButtonsFocus("JavaToJsButton");
 }
 
 //***************************************************
@@ -101,7 +94,7 @@ function getCitiesList_JavaToJava() {
 		getCitiesListSuccess,
 		getCitiesListFailure
 	);*/
-	switchButtonsFocus("JavaToJavaButton");
+	//switchButtonsFocus("JavaToJavaButton");
 }
 
 //***************************************************
@@ -112,7 +105,6 @@ function getCitiesListSuccess(response) {
 	 * JS adapters return response.responseJSON.resultSet while Java adapters return only response.responseJSON
 	 * So first we check the response to decide what is the resultSet that we wish to use.
 	 */
-   alert("getCitiesListSuccess\n\n"+ JSON.stringify(response.responseJSON.resultSet));
 	if(response.responseJSON.resultSet != "undefined" && response.responseJSON.resultSet != null){
 		var resultSet = response.responseJSON.resultSet;
 	}
@@ -158,8 +150,6 @@ function fillCitiesList(){
 //***************************************************
 /* This function changes the content of the page after the selected city has been changed */
 function citySelectionChange() {
-  alert("citySelectionChange");
-  alert(JSON.stringify(citiesList));
 	var index = $('#citiesList').prop("selectedIndex");
 	var citySumm = citiesList[index].summary;
 	var cityWeather = citiesList[index].weather;
