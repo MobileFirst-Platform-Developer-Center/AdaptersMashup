@@ -36,6 +36,7 @@ limitations under the License.
 		</connectionPolicy>
 	</connectivity>
 
-	<procedure name="getCityWeather"/>
-	<procedure name="getCitiesWeather"/>
+	<procedure name="getCitiesWeather" secured="false"/>
+	<procedure name="getCitiesList" secured="false"/>
+	<procedure name="getCityWeather" secured="false"/>
 </mfp:adapter>

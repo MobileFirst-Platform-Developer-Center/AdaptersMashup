@@ -1,0 +1,97 @@
+/**
+* Copyright 2015 IBM Corp.
+*
+* Licensed under the Apache License, Version 2.0 (the "License");
+* you may not use this file except in compliance with the License.
+* You may obtain a copy of the License at
+*
+* http://www.apache.org/licenses/LICENSE-2.0
+*
+* Unless required by applicable law or agreed to in writing, software
+* distributed under the License is distributed on an "AS IS" BASIS,
+* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+* See the License for the specific language governing permissions and
+* limitations under the License.
+*/
+
+body {
+    -webkit-touch-callout: none;                /* prevent callout to copy image, etc when tap to hold */
+    -webkit-text-size-adjust: none;             /* prevent webkit from resizing text to fit */
+    -webkit-user-select: none;                  /* prevent copy paste, to allow, change 'none' to 'text' */
+	margin: 0;
+	font-family: sans-serif;
+	background-color: #ccc;
+}
+
+h1 {
+	margin: 0;
+	font-size: 18px;
+	font-family: inherit;
+}
+
+#header {
+	text-align: center;
+	background-color: #1D4D90;
+	color: #F9FAFB;
+	font-size: 16px;
+	height: 38px;
+	line-height: 38px;
+	border-bottom: 1px solid white;
+	position: fixed;
+	width: 100%;
+}
+
+#subTitle {
+	color: #CCCCCC;
+	font-size: 14px;
+}
+
+#wrapper {
+	width: 90%;
+	margin: auto;
+	padding-top: 45px;
+}
+
+#wrapper select {
+	color: #1D4D90;
+	padding: 2px;
+	width: 70%;
+}
+
+#wrapper #info {
+	margin: 15px auto;
+	padding: 5px;
+	border: 1px solid lightgrey;
+	text-align: center;
+	text-shadow: 2px 2px 5px #1D4D90;
+	font-size: 14px;
+}
+
+.AdapterTypeButton {
+	margin: 5px;
+	background-color: #1D4D90;
+	color: white;
+	border: none;
+	font-size: 14px;
+	width: 240px;
+	height:40px;
+	-moz-border-radius: 8px;
+  	-webkit-border-radius: 8px;
+}
+
+.AdapterTypeButtonSelected {
+	margin: 5px;
+	background-color: #FFFFFF;
+	color: #1D4D90;
+	border: 2px solid #1D4D90;
+	font-size: 14px;
+	font-weight: bold;
+	width: 240px;
+	height:40px;
+	-moz-border-radius: 8px;
+  	-webkit-border-radius: 8px;
+}
+
+button:focus {
+    outline: none;
+}

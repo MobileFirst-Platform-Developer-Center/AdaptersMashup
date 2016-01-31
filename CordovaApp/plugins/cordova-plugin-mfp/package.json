@@ -1,0 +1,68 @@
+{
+    "name": "cordova-plugin-mfp",
+    "version": "8.0.201601221951",
+    "description": "IBM MobileFirst Platform Foundation Cordova Plugin",
+    "cordova": {
+        "id": "cordova-plugin-mfp",
+        "platforms": [
+            "android",
+            "ios"
+        ]
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://www.ibm.com/mobilefirst"
+    },
+    "dependencies": {
+        "archiver": "0.20.0",
+        "crc": "^3.4.0",
+        "elementtree": "0.1.6",
+        "ibm-strings": "~0.1.0",
+        "mfp-config-xml": "0.0.1",
+        "nopt": "^3.0.6",
+        "npmlog": "0.0.6",
+        "plist": "1.1.0",
+        "q": "0.9.7",
+        "rimraf": "2.4.4",
+        "shelljs": "0.3.0"
+    },
+    "bundleDependencies": [
+        "crc",
+        "ibm-strings",
+        "mfp-config-xml",
+        "elementtree",
+        "nopt",
+        "plist",
+        "shelljs",
+        "npmlog",
+        "archiver",
+        "q",
+        "rimraf"
+    ],
+    "keywords": [
+        "cordova",
+        "ibm",
+        "worklight",
+        "mobilefirst",
+        "mfp",
+        "ecosystem:cordova",
+        "cordova-android",
+        "cordova-ios"
+    ],
+    "engines": [
+        {
+            "name": "cordova-android",
+            "version": ">=5.0.0 <6"
+        },
+        {
+            "name": "cordova-ios",
+            "version": ">=4.0.0 <5"
+        },
+        {
+            "name": "cordova-plugman",
+            "version": ">=5.3.0 <7"
+        }
+    ],
+    "author": "IBM",
+    "license": "IBM"
+}

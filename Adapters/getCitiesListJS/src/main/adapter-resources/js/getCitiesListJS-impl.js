@@ -15,17 +15,20 @@
 */
 
 function getCitiesWeather(){
-	var cityList = getCitiesList(); 
+	var cityList = getCitiesList();
 	for (var i = 0; i < cityList.resultSet.length; i++) {
 		var yahooWeatherData = getCityWeather(cityList.resultSet[i].identifier);
-		
+
 		if (yahooWeatherData.isSuccessful)
 			cityList.resultSet[i].weather = yahooWeatherData.rss.channel.item.description;
+		else {
+			cityList.resultSet[i].weather = "Could not receive the weather..."
+		}
 	}
 	return cityList;
 }
 
-var getCitiesListStatement = WL.Server.createSQLStatement("select city, identifier, summary from weather;");
+var getCitiesListStatement = "select city, identifier, summary from weather;";
 function getCitiesList() {
 	return WL.Server.invokeSQLStatement({
 		preparedStatement : getCitiesListStatement,
@@ -34,9 +37,13 @@ function getCitiesList() {
 }
 
 function getCityWeather(woeid){
-	return WL.Server.invokeProcedure({
+	//var result = WL.Server.invokeProcedure({
+		return WL.Server.invokeProcedure({
 		adapter : 'getCityWeatherJS',
 		procedure : 'getYahooWeather',
 		parameters : [woeid]
 	});
+
+	//WL.Logger.warn(JSON.stringify(result));
+	//return result;
 }

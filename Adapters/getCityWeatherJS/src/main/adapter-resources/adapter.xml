@@ -36,5 +36,5 @@ limitations under the License.
 		</connectionPolicy>
 	</connectivity>
 
-	<procedure name="getYahooWeather"/>
+	<procedure name="getYahooWeather" secured="false"/>
 </mfp:adapter>
