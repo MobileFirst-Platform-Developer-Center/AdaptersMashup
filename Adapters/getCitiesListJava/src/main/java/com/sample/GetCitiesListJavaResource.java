@@ -46,7 +46,7 @@ public class GetCitiesListJavaResource {
 	static DataSource ds = null;
 	static Context ctx = null;
 	/*
-	 * For more info on JAX-RS see https://jsr311.java.net/nonav/releases/1.1/index.html
+	 * For more info on JAX-RS see https://jax-rs-spec.java.net/nonav/2.0-rev-a/apidocs/index.html
 	 */
 
 	//Define logger (Standard java.util.Logger)
