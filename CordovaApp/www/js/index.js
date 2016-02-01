@@ -30,6 +30,9 @@ var wlInitOptions = {
 // Called automatically after MFP framework initialization by WL.Client.init(wlInitOptions).
 function wlCommonInit(){
   $('#citiesList').change(citySelectionChange);
+  document.getElementById("JsToJsButton").addEventListener("click", getCitiesList_JsToJs, false);
+  document.getElementById("JavaToJsButton").addEventListener("click", getCitiesList_JavaToJs, false);
+  document.getElementById("JavaToJavaButton").addEventListener("click", getCitiesList_JavaToJava, false);
   getCitiesList_JsToJs();
 }
 
@@ -75,26 +78,24 @@ function getCitiesList_JsToJs() {
 // Java adapter -> JS adapter
 //***************************************************
 function getCitiesList_JavaToJs() {
-	//busyIndicator.show();
-	/*var resourceRequest = new WLResourceRequest("/adapters/getCitiesListJavaToJs/getCitiesList_JavaToJs", WLResourceRequest.GET, 30000);
+	var resourceRequest = new WLResourceRequest("/adapters/getCitiesListJavaToJs/getCitiesList_JavaToJs", WLResourceRequest.GET, 30000);
 	resourceRequest.send().then(
 		getCitiesListSuccess,
 		getCitiesListFailure
-	);*/
-	//switchButtonsFocus("JavaToJsButton");
+	);
+	switchButtonsFocus("JavaToJsButton");
 }
 
 //***************************************************
 // Java adapter -> Java adapter
 //***************************************************
 function getCitiesList_JavaToJava() {
-	//busyIndicator.show();
-	/*var resourceRequest = new WLResourceRequest("/adapters/getCitiesListJava/getCitiesList_JavaToJava", WLResourceRequest.GET, 30000);
+	var resourceRequest = new WLResourceRequest("/adapters/getCitiesListJava/getCitiesList_JavaToJava", WLResourceRequest.GET, 30000);
 	resourceRequest.send().then(
 		getCitiesListSuccess,
 		getCitiesListFailure
-	);*/
-	//switchButtonsFocus("JavaToJavaButton");
+	);
+	switchButtonsFocus("JavaToJavaButton");
 }
 
 //***************************************************
@@ -126,7 +127,7 @@ function getCitiesListSuccess(response) {
 function getCitiesListFailure(response) {
 	WL.Logger.debug("CityWeather::getCitiesListFailure");
 	WL.SimpleDialog.show("CityWeather",
-			"Can't get cities list. Check database connection", [ {
+			"Can't get cities list. Check database connection "+ JSON.stringify(response), [ {
 				text : 'Reload app',
 				handler : WL.Client.reloadApp
 			} ]);

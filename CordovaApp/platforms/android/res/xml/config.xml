@@ -135,6 +135,7 @@
     <allow-intent href="sms:*" />
     <allow-intent href="mailto:*" />
     <allow-intent href="geo:*" />
+    <allow-navigation href="http://*/*" />
     <mfp:android>
         <mfp:sdkChecksum>1916900844</mfp:sdkChecksum>
         <mfp:appChecksum>0</mfp:appChecksum>

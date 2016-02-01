@@ -1,76 +1,74 @@
-/**
-* Copyright 2015 IBM Corp.
-*
-* Licensed under the Apache License, Version 2.0 (the "License");
-* you may not use this file except in compliance with the License.
-* You may obtain a copy of the License at
-*
-* http://www.apache.org/licenses/LICENSE-2.0
-*
-* Unless required by applicable law or agreed to in writing, software
-* distributed under the License is distributed on an "AS IS" BASIS,
-* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-* See the License for the specific language governing permissions and
-* limitations under the License.
+/*
+ *    Licensed Materials - Property of IBM
+ *    5725-I43 (C) Copyright IBM Corp. 2015. All Rights Reserved.
+ *    US Government Users Restricted Rights - Use, duplication or
+ *    disclosure restricted by GSA ADP Schedule Contract with IBM Corp.
 */
 
 package com.sample;
 
-import java.io.IOException;
-import java.net.URLEncoder;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.logging.Logger;
-
-import javax.naming.Context;
-import javax.naming.InitialContext;
-import javax.naming.NamingException;
-import javax.sql.DataSource;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-
-import org.apache.http.client.methods.HttpUriRequest;
-
 import com.ibm.json.java.JSONArray;
 import com.ibm.json.java.JSONObject;
-import com.worklight.adapters.rest.api.MFPServerOAuthException;
-import com.worklight.adapters.rest.api.WLServerAPI;
-import com.worklight.adapters.rest.api.WLServerAPIProvider;
+import com.ibm.mfp.adapter.api.AdaptersAPI;
+import org.apache.http.client.methods.HttpUriRequest;
+
+import java.net.URLEncoder;
+import java.sql.*;
+import java.util.List;
+import java.util.logging.Logger;
+import java.io.IOException;
+
+import javax.ws.rs.FormParam;
+import javax.ws.rs.GET;
+import javax.ws.rs.HeaderParam;
+import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.Response;
+
 
 @Path("/")
 public class GetCitiesListJavaToJsResource {
-	Connection conn = null;
-	static DataSource ds = null;
-	static Context ctx = null;
 	/*
 	 * For more info on JAX-RS see https://jax-rs-spec.java.net/nonav/2.0-rev-a/apidocs/index.html
 	 */
-
+		
 	//Define logger (Standard java.util.Logger)
 	static Logger logger = Logger.getLogger(GetCitiesListJavaToJsResource.class.getName());
+	Connection conn = null;
 
-    //Define the server api to be able to perform server operations
-    WLServerAPI api = WLServerAPIProvider.getWLServerAPI();
+	@Context
+	AdaptersAPI adaptersAPI;
 
-    public static void init() throws NamingException {
-        ctx = new InitialContext();
-        ds = (DataSource)ctx.lookup("jdbc/mobilefirst_training");
-    }
-
-    @GET
+	@GET
 	@Path("/getCitiesList_JavaToJs")
-	public String JavaToJs() throws SQLException, MFPServerOAuthException, IOException{
-    	JSONArray jsonArr = new JSONArray();
+	public String JavaToJs() throws SQLException, IOException{
+		JSONArray jsonArr = new JSONArray();
 
-    	PreparedStatement getAllCities = getSQLConnection().prepareStatement("select city, identifier, summary from weather");
+		// Create connection to DataBase
+		String url = "jdbc:mysql://127.0.0.1:3306/mobilefirst_training";
+		String username = "mobilefirst";
+		String password = "mobilefirst";
+		try {
+			conn = DriverManager.getConnection(url, username, password);
+		} catch (SQLException e) {
+			e.printStackTrace();
+			logger.info("Failed to open DB: "+ e.getMessage());
+		}
+
+		// Run SQL Query
+		PreparedStatement getAllCities = conn.prepareStatement("select city, identifier, summary from weather");
 		ResultSet rs = getAllCities.executeQuery();
 		while (rs.next()) {
 			/* Calling a JavaScript HTTP adapter procedure */
-			HttpUriRequest req = api.getAdaptersAPI().createJavascriptAdapterRequest("getCityWeatherJS", "getYahooWeather", URLEncoder.encode(rs.getString("identifier"), "UTF-8"));
-			org.apache.http.HttpResponse response = api.getAdaptersAPI().executeAdapterRequest(req);
-			JSONObject jsonWeather = api.getAdaptersAPI().getResponseAsJSON(response);
+			HttpUriRequest req = adaptersAPI.createJavascriptAdapterRequest("getCityWeatherJS", "getYahooWeather", URLEncoder.encode(rs.getString("identifier"), "UTF-8"));
+			org.apache.http.HttpResponse response = adaptersAPI.executeAdapterRequest(req);
+			JSONObject jsonWeather = adaptersAPI.getResponseAsJSON(response);
 
 			/* iterating through the response to get only the weather as string (rss.channel.item.description) */
 			JSONObject rss = (JSONObject) jsonWeather.get("rss");
@@ -88,20 +86,22 @@ public class GetCitiesListJavaToJsResource {
 			/* Adding the current JSONObject to a JSONArray that will be returned to the application */
 			jsonArr.add(jsonObj);
 		}
-		conn.close();
+		conn.close(); // Close Database connection
 		return jsonArr.toString();
 	}
 
-    /* Connect to MySQL DB */
-	private Connection getSQLConnection(){
+	/* Connect to MySQL DB */
+	/*private Connection getSQLConnection(){
+		String url = "jdbc:mysql://127.0.0.1:3306/mobilefirst_training";
+		String username = "mobilefirst";
+		String password = "mobilefirst";
 		try {
-			conn = ds.getConnection();
-
-		} catch (SQLException ex) {
-		    System.out.println("SQLException: " + ex.getMessage());
-		    System.out.println("SQLState: " + ex.getSQLState());
-		    System.out.println("VendorError: " + ex.getErrorCode());
+			conn = DriverManager.getConnection(url, username, password);
+		} catch (SQLException e) {
+			e.printStackTrace();
+			logger.info("Failed to open DB: "+ e.getMessage());
 		}
 		return conn;
-	}
+	}*/
+		
 }
