@@ -39,6 +39,15 @@ public class GetCitiesListJavaResource {
 	@Context
 	AdaptersAPI adaptersAPI;
 
+	public static void init() {
+		try {
+			Class.forName("com.mysql.jdbc.Driver");
+		}
+		catch(ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+	}
+
 	@GET
 	@Path("/getCitiesList_JavaToJava")
 	public String doGetCitiesList() throws SQLException, IOException{
@@ -49,7 +58,6 @@ public class GetCitiesListJavaResource {
 			conn = DriverManager.getConnection(DB_url, DB_username, DB_password);
 		} catch (SQLException e) {
 			e.printStackTrace();
-			logger.info("Failed to open DB: "+ e.getMessage());
 		}
 
 		PreparedStatement getAllCities = conn.prepareStatement("select city, identifier, summary from weather");

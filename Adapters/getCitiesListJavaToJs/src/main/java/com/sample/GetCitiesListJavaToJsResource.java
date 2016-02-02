@@ -41,9 +41,22 @@ public class GetCitiesListJavaToJsResource {
 	//Define logger (Standard java.util.Logger)
 	static Logger logger = Logger.getLogger(GetCitiesListJavaToJsResource.class.getName());
 	Connection conn = null;
+	String DB_url = "jdbc:mysql://127.0.0.1:3306/mobilefirst_training";
+	String DB_username = "mobilefirst";
+	String DB_password = "mobilefirst";
 
 	@Context
 	AdaptersAPI adaptersAPI;
+
+	public static void init() {
+		try {
+			Class.forName("com.mysql.jdbc.Driver");
+		}
+		catch(ClassNotFoundException e)
+		{
+			e.printStackTrace();
+		}
+	}
 
 	@GET
 	@Path("/getCitiesList_JavaToJs")
@@ -51,14 +64,10 @@ public class GetCitiesListJavaToJsResource {
 		JSONArray jsonArr = new JSONArray();
 
 		// Create connection to DataBase
-		String url = "jdbc:mysql://127.0.0.1:3306/mobilefirst_training";
-		String username = "mobilefirst";
-		String password = "mobilefirst";
 		try {
-			conn = DriverManager.getConnection(url, username, password);
+			conn = DriverManager.getConnection(DB_url, DB_username, DB_password);
 		} catch (SQLException e) {
 			e.printStackTrace();
-			logger.info("Failed to open DB: "+ e.getMessage());
 		}
 
 		// Run SQL Query
@@ -89,19 +98,4 @@ public class GetCitiesListJavaToJsResource {
 		conn.close(); // Close Database connection
 		return jsonArr.toString();
 	}
-
-	/* Connect to MySQL DB */
-	/*private Connection getSQLConnection(){
-		String url = "jdbc:mysql://127.0.0.1:3306/mobilefirst_training";
-		String username = "mobilefirst";
-		String password = "mobilefirst";
-		try {
-			conn = DriverManager.getConnection(url, username, password);
-		} catch (SQLException e) {
-			e.printStackTrace();
-			logger.info("Failed to open DB: "+ e.getMessage());
-		}
-		return conn;
-	}*/
-		
 }

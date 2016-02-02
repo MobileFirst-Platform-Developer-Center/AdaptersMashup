@@ -17,6 +17,7 @@ public class GetCitiesListJavaToJsApplication extends Application{
 	
 
 	protected void init() throws Exception {
+		GetCitiesListJavaToJsResource.init();
 		logger.info("Adapter initialized!");
 	}
 	
