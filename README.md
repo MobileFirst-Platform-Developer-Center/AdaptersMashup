@@ -4,6 +4,7 @@ IBM MobileFirst Platform Foundation
 A sample that demonstrates adapters mashup (passing requests between different adapters paths/procedures).
 This sample demonstrates a specific scenario where an SQL adapter collects data from a database, passes the data to an HTTP adapter that calls a Webservice and returns the data accepted from the Webservice.
 The demonstration is presented in 3 possible combinations:
+
 1. JavaScript adapter -> JavaScript adapter.
 2. Java adapter -> JavaScript adapter.
 3. Java adapter -> Java adapter.
