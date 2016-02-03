@@ -1,1 +1,0 @@
-var WL_CHECKSUM = {"checksum":0,"date":1454420394442,"machine":"shmulikb-mac"}
