@@ -1,6 +1,0 @@
-framework module IBMMobileFirstPlatformFoundationJSONStore {
-  umbrella header "IBMMobileFirstPlatformFoundationJSONStore.h"
-
-  export *
-  module * { export * }
-}
