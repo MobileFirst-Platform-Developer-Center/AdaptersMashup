@@ -15,6 +15,7 @@ import com.ibm.json.java.JSONArray;
 import com.ibm.json.java.JSONObject;
 import com.ibm.mfp.adapter.api.AdaptersAPI;
 
+import com.ibm.mfp.adapter.api.ConfigurationAPI;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpUriRequest;
@@ -32,12 +33,13 @@ public class GetCitiesListJavaResource {
 	//Define logger (Standard java.util.Logger)
 	static Logger logger = Logger.getLogger(GetCitiesListJavaResource.class.getName());
 	Connection conn = null;
-	String DB_url = "jdbc:mysql://127.0.0.1:3306/mobilefirst_training";
-	String DB_username = "mobilefirst";
-	String DB_password = "mobilefirst";
+	private static String DB_url;
+	private static String DB_username;
+	private static String DB_password;
 
 	@Context
 	AdaptersAPI adaptersAPI;
+	ConfigurationAPI configurationAPI;
 
 	public static void init() {
 		try {
@@ -55,6 +57,11 @@ public class GetCitiesListJavaResource {
 		String getWeatherInfoProcedureURL = null;
 
 		try {
+			/* assign values from adapter XML file / Console to local variables */
+			DB_url = configurationAPI.getPropertyValue("DB_url");
+			DB_username = configurationAPI.getPropertyValue("DB_username");
+			DB_password = configurationAPI.getPropertyValue("DB_password");
+			/* Connect to Database */
 			conn = DriverManager.getConnection(DB_url, DB_username, DB_password);
 		} catch (SQLException e) {
 			e.printStackTrace();
