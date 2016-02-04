@@ -10,6 +10,8 @@ package com.sample;
 import com.ibm.json.java.JSONArray;
 import com.ibm.json.java.JSONObject;
 import com.ibm.mfp.adapter.api.AdaptersAPI;
+import com.ibm.mfp.adapter.api.ConfigurationAPI;
+import org.apache.commons.dbcp.BasicDataSource;
 import org.apache.http.client.methods.HttpUriRequest;
 
 import java.net.URLEncoder;
@@ -40,22 +42,29 @@ public class GetCitiesListJavaToJsResource {
 		
 	//Define logger (Standard java.util.Logger)
 	static Logger logger = Logger.getLogger(GetCitiesListJavaToJsResource.class.getName());
-	Connection conn = null;
-	String DB_url = "jdbc:mysql://127.0.0.1:3306/mobilefirst_training";
-	String DB_username = "mobilefirst";
-	String DB_password = "mobilefirst";
+	private static BasicDataSource ds = null;
 
 	@Context
 	AdaptersAPI adaptersAPI;
 
-	public static void init() {
-		try {
-			Class.forName("com.mysql.jdbc.Driver");
+	@Context
+	ConfigurationAPI configurationAPI;
+
+	public Connection getSQLConnection(){
+		Connection conn = null;
+		if(ds == null){
+			ds= new BasicDataSource();
+			ds.setDriverClassName("com.mysql.jdbc.Driver");
+			ds.setUrl(configurationAPI.getPropertyValue("DB_url"));
+			ds.setUsername(configurationAPI.getPropertyValue("DB_username"));
+			ds.setPassword(configurationAPI.getPropertyValue("DB_password"));
 		}
-		catch(ClassNotFoundException e)
-		{
+		try {
+			conn = ds.getConnection();
+		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+		return conn;
 	}
 
 	@GET
@@ -63,14 +72,8 @@ public class GetCitiesListJavaToJsResource {
 	public String JavaToJs() throws SQLException, IOException{
 		JSONArray jsonArr = new JSONArray();
 
-		// Create connection to DataBase
-		try {
-			conn = DriverManager.getConnection(DB_url, DB_username, DB_password);
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-
 		// Run SQL Query
+		Connection conn = getSQLConnection();
 		PreparedStatement getAllCities = conn.prepareStatement("select city, identifier, summary from weather");
 		ResultSet rs = getAllCities.executeQuery();
 		while (rs.next()) {

@@ -16,10 +16,12 @@ import com.ibm.json.java.JSONObject;
 import com.ibm.mfp.adapter.api.AdaptersAPI;
 
 import com.ibm.mfp.adapter.api.ConfigurationAPI;
+import org.apache.commons.dbcp.BasicDataSource;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpUriRequest;
 
+import javax.sql.DataSource;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.core.Context;
@@ -32,22 +34,29 @@ public class GetCitiesListJavaResource {
 		
 	//Define logger (Standard java.util.Logger)
 	static Logger logger = Logger.getLogger(GetCitiesListJavaResource.class.getName());
-	Connection conn = null;
-	private static String DB_url;
-	private static String DB_username;
-	private static String DB_password;
+	private static BasicDataSource ds = null;
 
 	@Context
 	AdaptersAPI adaptersAPI;
+
+	@Context
 	ConfigurationAPI configurationAPI;
 
-	public static void init() {
-		try {
-			Class.forName("com.mysql.jdbc.Driver");
+	public Connection getSQLConnection(){
+		Connection conn = null;
+		if(ds == null){
+			ds= new BasicDataSource();
+			ds.setDriverClassName("com.mysql.jdbc.Driver");
+			ds.setUrl(configurationAPI.getPropertyValue("DB_url"));
+			ds.setUsername(configurationAPI.getPropertyValue("DB_username"));
+			ds.setPassword(configurationAPI.getPropertyValue("DB_password"));
 		}
-		catch(ClassNotFoundException e) {
+		try {
+			conn = ds.getConnection();
+		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+		return conn;
 	}
 
 	@GET
@@ -56,17 +65,7 @@ public class GetCitiesListJavaResource {
 		JSONArray jsonArr = new JSONArray();
 		String getWeatherInfoProcedureURL = null;
 
-		try {
-			/* assign values from adapter XML file / Console to local variables */
-			DB_url = configurationAPI.getPropertyValue("DB_url");
-			DB_username = configurationAPI.getPropertyValue("DB_username");
-			DB_password = configurationAPI.getPropertyValue("DB_password");
-			/* Connect to Database */
-			conn = DriverManager.getConnection(DB_url, DB_username, DB_password);
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-
+		Connection conn = getSQLConnection();
 		PreparedStatement getAllCities = conn.prepareStatement("select city, identifier, summary from weather");
 		ResultSet rs = getAllCities.executeQuery();
 		while (rs.next()) {
