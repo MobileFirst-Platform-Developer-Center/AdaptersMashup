@@ -35,6 +35,9 @@ public class GetCitiesListJavaResource {
 	//Define logger (Standard java.util.Logger)
 	static Logger logger = Logger.getLogger(GetCitiesListJavaResource.class.getName());
 	private static BasicDataSource ds = null;
+	private static String DB_url = null;
+	private static String DB_username = null;
+	private static String DB_password  = null;
 
 	@Context
 	AdaptersAPI adaptersAPI;
@@ -43,8 +46,9 @@ public class GetCitiesListJavaResource {
 	ConfigurationAPI configurationAPI;
 
 	public Connection getSQLConnection(){
+		// Create a connection object to the database
 		Connection conn = null;
-		if(ds == null){
+		if(updatedProperties() || ds == null){
 			ds= new BasicDataSource();
 			ds.setDriverClassName("com.mysql.jdbc.Driver");
 			ds.setUrl(configurationAPI.getPropertyValue("DB_url"));
@@ -59,9 +63,26 @@ public class GetCitiesListJavaResource {
 		return conn;
 	}
 
+	private boolean updatedProperties() {
+		// Check if the properties were changed during runtime (in the console)
+		String last_url = DB_url;
+		String last_username = DB_username;
+		String last_password  = DB_password;
+
+		DB_url = configurationAPI.getPropertyValue("DB_url");
+		DB_username = configurationAPI.getPropertyValue("DB_username");
+		DB_password = configurationAPI.getPropertyValue("DB_password");
+
+		return !last_url.equals(DB_url) ||
+				!last_username.equals(DB_username) ||
+				!last_password.equals(last_password);
+	}
+
 	@GET
 	@Path("/getCitiesList_JavaToJava")
 	public String doGetCitiesList() throws SQLException, IOException{
+		// Run a query to get cities data from fatabase + for each city use a JavaScript adapter
+		// to fetch data from a weather webservice and put it all in a jsonArray object
 		JSONArray jsonArr = new JSONArray();
 		String getWeatherInfoProcedureURL = null;
 

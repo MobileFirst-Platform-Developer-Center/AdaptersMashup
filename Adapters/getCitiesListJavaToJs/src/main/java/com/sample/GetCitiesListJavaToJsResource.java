@@ -43,6 +43,9 @@ public class GetCitiesListJavaToJsResource {
 	//Define logger (Standard java.util.Logger)
 	static Logger logger = Logger.getLogger(GetCitiesListJavaToJsResource.class.getName());
 	private static BasicDataSource ds = null;
+	private static String DB_url = null;
+	private static String DB_username = null;
+	private static String DB_password  = null;
 
 	@Context
 	AdaptersAPI adaptersAPI;
@@ -52,7 +55,7 @@ public class GetCitiesListJavaToJsResource {
 
 	public Connection getSQLConnection(){
 		Connection conn = null;
-		if(ds == null){
+		if(updatedProperties() || ds == null){
 			ds= new BasicDataSource();
 			ds.setDriverClassName("com.mysql.jdbc.Driver");
 			ds.setUrl(configurationAPI.getPropertyValue("DB_url"));
@@ -65,6 +68,21 @@ public class GetCitiesListJavaToJsResource {
 			e.printStackTrace();
 		}
 		return conn;
+	}
+
+	private boolean updatedProperties() {
+		// Check if the properties were changed during runtime (in the console)
+		String last_url = DB_url;
+		String last_username = DB_username;
+		String last_password  = DB_password;
+
+		DB_url = configurationAPI.getPropertyValue("DB_url");
+		DB_username = configurationAPI.getPropertyValue("DB_username");
+		DB_password = configurationAPI.getPropertyValue("DB_password");
+
+		return !last_url.equals(DB_url) ||
+				!last_username.equals(DB_username) ||
+				!last_password.equals(last_password);
 	}
 
 	@GET
