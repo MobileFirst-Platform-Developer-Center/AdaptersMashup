@@ -14,21 +14,20 @@ import java.util.*;
 public class GetCitiesListJavaToJsApplication extends Application{
 
 	static Logger logger = Logger.getLogger(GetCitiesListJavaToJsApplication.class.getName());
-	
+
 
 	protected void init() throws Exception {
-		GetCitiesListJavaToJsResource.init();
 		logger.info("Adapter initialized!");
 	}
-	
+
 
 	protected void destroy() throws Exception {
 		logger.info("Adapter destroyed!");
 	}
-	
+
 
 	protected String getPackageToScan() {
-		//The package of this class will be scanned (recursively) to find JAX-RS resources. 
+		//The package of this class will be scanned (recursively) to find JAX-RS resources.
 		//It is also possible to override "getPackagesToScan" method in order to return more than one package for scanning
 		return getClass().getPackage().getName();
 	}

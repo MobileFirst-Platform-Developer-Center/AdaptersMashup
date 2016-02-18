@@ -80,9 +80,9 @@ public class GetCitiesListJavaToJsResource {
 		DB_username = configurationAPI.getPropertyValue("DB_username");
 		DB_password = configurationAPI.getPropertyValue("DB_password");
 
-		return !last_url.equals(DB_url) ||
-				!last_username.equals(DB_username) ||
-				!last_password.equals(last_password);
+		return !DB_url.equals(last_url) ||
+				!DB_username.equals(last_username) ||
+				!DB_password.equals(last_password);
 	}
 
 	@GET
