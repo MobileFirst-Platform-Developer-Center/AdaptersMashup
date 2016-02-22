@@ -7,16 +7,28 @@
 
 package com.sample;
 
+import com.ibm.mfp.adapter.api.ConfigurationAPI;
+import org.apache.commons.dbcp.BasicDataSource;
+
 import java.util.logging.Logger;
 import javax.ws.rs.core.Application;
+import javax.ws.rs.core.Context;
 import java.util.*;
 
 public class GetCitiesListJavaApplication extends Application{
 
 	static Logger logger = Logger.getLogger(GetCitiesListJavaApplication.class.getName());
-	
+	public BasicDataSource dataSource = null;
+
+	@Context
+	ConfigurationAPI configurationAPI;
 
 	protected void init() throws Exception {
+		dataSource= new BasicDataSource();
+		dataSource.setDriverClassName("com.mysql.jdbc.Driver");
+		dataSource.setUrl(configurationAPI.getPropertyValue("DB_url"));
+		dataSource.setUsername(configurationAPI.getPropertyValue("DB_username"));
+		dataSource.setPassword(configurationAPI.getPropertyValue("DB_password"));
 		logger.info("Adapter initialized!");
 	}
 	
