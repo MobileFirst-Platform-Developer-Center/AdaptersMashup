@@ -127,7 +127,7 @@ function getCitiesListSuccess(response) {
 function getCitiesListFailure(response) {
 	WL.Logger.debug("CityWeather::getCitiesListFailure");
 	WL.SimpleDialog.show("CityWeather",
-			"Can't get cities list. Check database connection "+ JSON.stringify(response), [ {
+			"Error: "+ JSON.stringify(response), [ {
 				text : 'Reload app',
 				handler : WL.Client.reloadApp
 			} ]);

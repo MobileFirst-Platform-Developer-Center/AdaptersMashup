@@ -51,26 +51,17 @@ public class GetCitiesListJavaResource {
 	@Context
 	ConfigurationAPI configurationAPI;
 
-	public Connection getSQLConnection(){
-		Connection conn = null;
-		if(ds == null){
-			ds= new BasicDataSource();
-			ds.setDriverClassName("com.mysql.jdbc.Driver");
-			ds.setUrl(configurationAPI.getPropertyValue("DB_url"));
-			ds.setUsername(configurationAPI.getPropertyValue("DB_username"));
-			ds.setPassword(configurationAPI.getPropertyValue("DB_password"));
-		}
-		try {
-			conn = ds.getConnection();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		return conn;
+	public Connection getSQLConnection() throws SQLException{
+		// Create a connection object to the database
+		GetCitiesListJavaApplication app = adaptersAPI.getJaxRsApplication(GetCitiesListJavaApplication.class);
+		return app.dataSource.getConnection();
 	}
 
 	@GET
 	@Path("/getCitiesList_JavaToJava")
 	public String doGetCitiesList() throws SQLException, IOException{
+		// Run a query to get cities data from fatabase + for each city use a JavaScript adapter
+		// to fetch data from a weather webservice and put it all in a jsonArray object
 		JSONArray jsonArr = new JSONArray();
 		String getWeatherInfoProcedureURL = null;
 

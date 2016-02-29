@@ -50,7 +50,6 @@ public class GetCitiesListJavaToJsResource {
 
 	//Define logger (Standard java.util.Logger)
 	static Logger logger = Logger.getLogger(GetCitiesListJavaToJsResource.class.getName());
-	private static BasicDataSource ds = null;
 
 	@Context
 	AdaptersAPI adaptersAPI;
@@ -58,21 +57,10 @@ public class GetCitiesListJavaToJsResource {
 	@Context
 	ConfigurationAPI configurationAPI;
 
-	public Connection getSQLConnection(){
-		Connection conn = null;
-		if(ds == null){
-			ds= new BasicDataSource();
-			ds.setDriverClassName("com.mysql.jdbc.Driver");
-			ds.setUrl(configurationAPI.getPropertyValue("DB_url"));
-			ds.setUsername(configurationAPI.getPropertyValue("DB_username"));
-			ds.setPassword(configurationAPI.getPropertyValue("DB_password"));
-		}
-		try {
-			conn = ds.getConnection();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		return conn;
+	public Connection getSQLConnection() throws SQLException{
+		// Create a connection object to the database
+		GetCitiesListJavaToJsApplication app = adaptersAPI.getJaxRsApplication(GetCitiesListJavaToJsApplication.class);
+		return app.dataSource.getConnection();
 	}
 
 	@GET
