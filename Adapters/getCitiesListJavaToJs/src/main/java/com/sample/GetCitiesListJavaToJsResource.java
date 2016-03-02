@@ -35,13 +35,13 @@ import javax.ws.rs.core.Response;
 
 
 @Path("/")
-public class GetCitiesListJavaToJsResource {
+public class GetCitiesListJavaToJSResource {
 	/*
 	 * For more info on JAX-RS see https://jax-rs-spec.java.net/nonav/2.0-rev-a/apidocs/index.html
 	 */
-		
+
 	//Define logger (Standard java.util.Logger)
-	static Logger logger = Logger.getLogger(GetCitiesListJavaToJsResource.class.getName());
+	static Logger logger = Logger.getLogger(GetCitiesListJavaToJSResource.class.getName());
 
 	@Context
 	AdaptersAPI adaptersAPI;
@@ -51,12 +51,12 @@ public class GetCitiesListJavaToJsResource {
 
 	public Connection getSQLConnection() throws SQLException{
 		// Create a connection object to the database
-		GetCitiesListJavaToJsApplication app = adaptersAPI.getJaxRsApplication(GetCitiesListJavaToJsApplication.class);
+		GetCitiesListJavaToJSApplication app = adaptersAPI.getJaxRsApplication(GetCitiesListJavaToJSApplication.class);
 		return app.dataSource.getConnection();
 	}
 
 	@GET
-	@Path("/getCitiesList_JavaToJs")
+	@Path("/getCitiesList_JavaToJS")
 	public String JavaToJs() throws SQLException, IOException{
 		JSONArray jsonArr = new JSONArray();
 

@@ -5,15 +5,15 @@
 	US Government Users Restricted Rights - Use, duplication or
 	disclosure restricted by GSA ADP Schedule Contract with IBM Corp.
 -->
-<mfp:adapter name="getCitiesListJavaToJs"
+<mfp:adapter name="getCitiesListJavaToJS"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xmlns:mfp="http://www.ibm.com/mfp/integration"
 	xmlns:http="http://www.ibm.com/mfp/integration/http">
 
-	<displayName>getCitiesListJavaToJs</displayName>
-	<description>getCitiesListJavaToJs</description>
+	<displayName>getCitiesListJavaToJS</displayName>
+	<description>getCitiesListJavaToJS</description>
 
-	<JAXRSApplicationClass>com.sample.GetCitiesListJavaToJsApplication</JAXRSApplicationClass>
+	<JAXRSApplicationClass>com.sample.GetCitiesListJavaToJSApplication</JAXRSApplicationClass>
 
 	<property name="DB_url" displayName="Database URL" defaultValue="jdbc:mysql://127.0.0.1:3306/mobilefirst_training"  />
 	<property name="DB_username" displayName="Database username" defaultValue="mobilefirst"  />

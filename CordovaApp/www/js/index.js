@@ -78,7 +78,7 @@ function getCitiesList_JsToJs() {
 // Java adapter -> JS adapter
 //***************************************************
 function getCitiesList_JavaToJs() {
-	var resourceRequest = new WLResourceRequest("/adapters/getCitiesListJavaToJs/getCitiesList_JavaToJs", WLResourceRequest.GET, 30000);
+	var resourceRequest = new WLResourceRequest("/adapters/getCitiesListJavaToJS/getCitiesList_JavaToJS", WLResourceRequest.GET, 30000);
 	resourceRequest.send().then(
 		getCitiesListSuccess,
 		getCitiesListFailure

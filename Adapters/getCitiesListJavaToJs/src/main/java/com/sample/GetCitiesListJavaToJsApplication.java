@@ -16,9 +16,9 @@ import javax.ws.rs.core.Context;
 import java.util.*;
 
 
-public class GetCitiesListJavaToJsApplication extends Application{
+public class GetCitiesListJavaToJSApplication extends Application{
 
-	static Logger logger = Logger.getLogger(GetCitiesListJavaToJsApplication.class.getName());
+	static Logger logger = Logger.getLogger(GetCitiesListJavaToJSApplication.class.getName());
 
 	@Context
 	ConfigurationAPI configurationAPI;
@@ -48,7 +48,7 @@ public class GetCitiesListJavaToJsApplication extends Application{
 
 		public Set<Class<?>> getClasses() {
 			Set<Class<?>> classes = new HashSet<Class<?>>();
-			classes.add(GetCitiesListJavaToJsResource.class);
+			classes.add(GetCitiesListJavaToJSResource.class);
 			return classes;
 		}
 }
