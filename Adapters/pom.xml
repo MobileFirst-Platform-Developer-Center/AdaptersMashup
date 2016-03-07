@@ -23,8 +23,8 @@ limitations under the License.
 	<packaging>pom</packaging>
 
 	<modules>
-					<module>getCitiesListJS</module>
-					<module>getCityWeatherJS</module>
+		<module>getCitiesListJS</module>
+		<module>getCityWeatherJS</module>
     <module>getCitiesListJava</module>
     <module>getCityWeatherJava</module>
     <module>getCitiesListJavaToJs</module>
@@ -35,6 +35,7 @@ limitations under the License.
 		<mfpfUrl>http://localhost:9080/mfpadmin</mfpfUrl>
 		<mfpfUser>admin</mfpfUser>
 		<mfpfPassword>admin</mfpfPassword>
+		<mfpfRuntime>mfp</mfpfRuntime>
 	</properties>
 
 	<build>

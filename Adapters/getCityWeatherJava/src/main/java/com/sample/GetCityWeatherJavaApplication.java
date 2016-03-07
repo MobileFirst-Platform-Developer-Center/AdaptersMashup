@@ -18,7 +18,6 @@ package com.sample;
 import com.ibm.mfp.adapter.api.MFPJAXRSApplication;
 
 import java.util.logging.Logger;
-import java.util.*;
 
 public class GetCityWeatherJavaApplication extends MFPJAXRSApplication{
 
@@ -42,9 +41,4 @@ public class GetCityWeatherJavaApplication extends MFPJAXRSApplication{
 		return getClass().getPackage().getName();
 	}
 
-		public Set<Class<?>> getClasses() {
-			Set<Class<?>> classes = new HashSet<Class<?>>();
-			classes.add(GetCityWeatherJavaResource.class);
-			return classes;
-		}
 }
