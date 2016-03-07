@@ -17,14 +17,14 @@
 package com.sample;
 
 import com.ibm.mfp.adapter.api.ConfigurationAPI;
+import com.ibm.mfp.adapter.api.MFPJAXRSApplication;
 import org.apache.commons.dbcp.BasicDataSource;
 
 import java.util.logging.Logger;
-import javax.ws.rs.core.Application;
 import javax.ws.rs.core.Context;
 import java.util.*;
 
-public class GetCitiesListJavaApplication extends Application{
+public class GetCitiesListJavaApplication extends MFPJAXRSApplication{
 
 	static Logger logger = Logger.getLogger(GetCitiesListJavaApplication.class.getName());
 	public BasicDataSource dataSource = null;
