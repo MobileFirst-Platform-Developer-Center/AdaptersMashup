@@ -19,37 +19,21 @@ import com.ibm.json.java.JSONArray;
 import com.ibm.json.java.JSONObject;
 import com.ibm.mfp.adapter.api.AdaptersAPI;
 import com.ibm.mfp.adapter.api.ConfigurationAPI;
-import org.apache.commons.dbcp.BasicDataSource;
 import org.apache.http.client.methods.HttpUriRequest;
 
 import java.net.URLEncoder;
 import java.sql.*;
-import java.util.List;
-import java.util.logging.Logger;
 import java.io.IOException;
 
-import javax.ws.rs.FormParam;
+
 import javax.ws.rs.GET;
-import javax.ws.rs.HeaderParam;
-import javax.ws.rs.POST;
-import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
-import javax.ws.rs.core.Response;
+
 
 
 @Path("/")
 public class GetCitiesListJavaToJSResource {
-	/*
-	 * For more info on JAX-RS see https://jax-rs-spec.java.net/nonav/2.0-rev-a/apidocs/index.html
-	 */
-
-	//Define logger (Standard java.util.Logger)
-	static Logger logger = Logger.getLogger(GetCitiesListJavaToJSResource.class.getName());
 
 	@Context
 	AdaptersAPI adaptersAPI;

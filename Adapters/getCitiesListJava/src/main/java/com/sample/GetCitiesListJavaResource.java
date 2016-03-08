@@ -17,7 +17,6 @@ package com.sample;
 
 import java.net.URLEncoder;
 import java.sql.*;
-import java.util.logging.Logger;
 import java.io.IOException;
 
 import com.ibm.json.java.JSONArray;
@@ -25,25 +24,16 @@ import com.ibm.json.java.JSONObject;
 import com.ibm.mfp.adapter.api.AdaptersAPI;
 
 import com.ibm.mfp.adapter.api.ConfigurationAPI;
-import org.apache.commons.dbcp.BasicDataSource;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpUriRequest;
 
-import javax.sql.DataSource;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.core.Context;
 
 @Path("/")
 public class GetCitiesListJavaResource {
-	/*
-	 * For more info on JAX-RS see https://jax-rs-spec.java.net/nonav/2.0-rev-a/apidocs/index.html
-	 */
-
-	//Define logger (Standard java.util.Logger)
-	static Logger logger = Logger.getLogger(GetCitiesListJavaResource.class.getName());
-	private static BasicDataSource ds = null;
 
 	@Context
 	AdaptersAPI adaptersAPI;
@@ -63,7 +53,7 @@ public class GetCitiesListJavaResource {
 		// Run a query to get cities data from fatabase + for each city use a JavaScript adapter
 		// to fetch data from a weather webservice and put it all in a jsonArray object
 		JSONArray jsonArr = new JSONArray();
-		String getWeatherInfoProcedureURL = null;
+		String getWeatherInfoProcedureURL;
 
 		Connection conn = getSQLConnection();
 		PreparedStatement getAllCities = conn.prepareStatement("select city, identifier, summary from weather");
