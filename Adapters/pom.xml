@@ -27,7 +27,7 @@ limitations under the License.
 		<module>getCityWeatherJS</module>
     <module>getCitiesListJava</module>
     <module>getCityWeatherJava</module>
-    <module>getCitiesListJavaToJs</module>
+    <module>getCitiesListJavaToJS</module>
   </modules>
 
 	<properties>
