@@ -22,7 +22,7 @@ import org.apache.commons.dbcp.BasicDataSource;
 
 import java.util.logging.Logger;
 import javax.ws.rs.core.Context;
-import java.util.*;
+
 
 
 public class GetCitiesListJavaToJSApplication extends MFPJAXRSApplication{
@@ -55,9 +55,4 @@ public class GetCitiesListJavaToJSApplication extends MFPJAXRSApplication{
 		return getClass().getPackage().getName();
 	}
 
-		public Set<Class<?>> getClasses() {
-			Set<Class<?>> classes = new HashSet<Class<?>>();
-			classes.add(GetCitiesListJavaToJSResource.class);
-			return classes;
-		}
 }
