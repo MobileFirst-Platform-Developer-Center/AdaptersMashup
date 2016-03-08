@@ -15,7 +15,7 @@
 */
 
 function getYahooWeather(woeid) {
-	
+
 	var input = {
 	    method : 'get',
 	    returnedContentType : 'xml',
@@ -25,6 +25,6 @@ function getYahooWeather(woeid) {
 			'u' : 'c' //celcius
 		}
 	};
-	
-	return WL.Server.invokeHttp(input);
+
+	return MFP.Server.invokeHttp(input);
 }

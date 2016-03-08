@@ -30,14 +30,14 @@ function getCitiesWeather(){
 
 var getCitiesListStatement = "select city, identifier, summary from weather;";
 function getCitiesList() {
-	return WL.Server.invokeSQLStatement({
+	return MFP.Server.invokeSQLStatement({
 		preparedStatement : getCitiesListStatement,
 		parameters : []
 	});
 }
 
 function getCityWeather(woeid){
-		return WL.Server.invokeProcedure({
+		return MFP.Server.invokeProcedure({
 		adapter : 'getCityWeatherJS',
 		procedure : 'getYahooWeather',
 		parameters : [woeid]
