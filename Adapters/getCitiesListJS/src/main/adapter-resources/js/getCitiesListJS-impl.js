@@ -20,7 +20,7 @@ function getCitiesWeather(){
 		var yahooWeatherData = getCityWeather(cityList.resultSet[i].identifier);
 
 		if (yahooWeatherData.isSuccessful)
-			cityList.resultSet[i].weather = yahooWeatherData.rss.channel.item.description;
+			cityList.resultSet[i].weather = yahooWeatherData.query.results.channel.item.description;
 		else {
 			cityList.resultSet[i].weather = "Could not receive the weather..."
 		}

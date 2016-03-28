@@ -18,12 +18,8 @@ function getYahooWeather(woeid) {
 
 	var input = {
 	    method : 'get',
-	    returnedContentType : 'xml',
-	    path : 'forecastrss',
-		parameters : {
-			'w' : woeid,
-			'u' : 'c' //celcius
-		}
+	    returnedContentType : 'json',
+	    path : 'assets/samples/adapters-mashup/'+ woeid + '.json'
 	};
 
 	return MFP.Server.invokeHttp(input);
