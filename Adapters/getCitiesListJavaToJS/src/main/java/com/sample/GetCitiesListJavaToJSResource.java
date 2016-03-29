@@ -62,9 +62,10 @@ public class GetCitiesListJavaToJSResource {
 			org.apache.http.HttpResponse response = adaptersAPI.executeAdapterRequest(req);
 			JSONObject jsonWeather = adaptersAPI.getResponseAsJSON(response);
 
-			/* iterating through the response to get only the weather as string (rss.channel.item.description) */
-			JSONObject rss = (JSONObject) jsonWeather.get("rss");
-			JSONObject channel = (JSONObject) rss.get("channel");
+			/* iterating through the response to get only the weather as string (query.results.channel.item.description) */
+			JSONObject query = (JSONObject) jsonWeather.get("query");
+			JSONObject results = (JSONObject) query.get("results");
+			JSONObject channel = (JSONObject) results.get("channel");
 			JSONObject item = (JSONObject) channel.get("item");
 			String cityWeatherSummary = (String) item.get("description");
 

@@ -15,17 +15,22 @@
 */
 package com.sample;
 
+import org.apache.commons.io.IOUtils;
 import org.apache.http.HttpHost;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
+import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.wink.json4j.utils.XML;
 import org.xml.sax.SAXException;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.StringWriter;
 
 import javax.ws.rs.GET;
 
@@ -37,24 +42,25 @@ import javax.ws.rs.core.Response;
 
 @Path("/")
 public class GetCityWeatherJavaResource {
-
+	private String responseAsText = null;
 	private static CloseableHttpClient client;
 	private static HttpHost host;
 
 	public static void init() {
 		client = HttpClients.createDefault();
-		host = new HttpHost("weather.yahooapis.com");
+		host = new HttpHost("mobilefirstplatform.ibmcloud.com");
 	}
 
 	private Response execute(HttpUriRequest req) throws IOException, IllegalStateException, SAXException {
-
 		HttpResponse RSSResponse = client.execute(host, req);
 
+		InputStream content = RSSResponse.getEntity().getContent();
 		if (RSSResponse.getStatusLine().getStatusCode() == HttpStatus.SC_OK){
-			String json = XML.toJson(RSSResponse.getEntity().getContent());
-			return Response.ok().entity(json).build();
+			responseAsText = IOUtils.toString(content, "UTF-8");
+			content.close();
+			return Response.ok().entity(responseAsText).build();
 		}else{
-			RSSResponse.getEntity().getContent().close();
+			content.close();
 			return Response.status(RSSResponse.getStatusLine().getStatusCode()).entity(RSSResponse.getStatusLine().getReasonPhrase()).build();
 		}
 	}
@@ -62,7 +68,9 @@ public class GetCityWeatherJavaResource {
 	@GET
 	@Produces("application/json")
 	public Response get(@QueryParam("cityId") String cityId) throws IOException, IllegalStateException, SAXException {
-		return execute(new HttpGet("/forecastrss?w="+ cityId +"&u=c"));
+		String path = "/assets/samples/adapters-mashup/"+ cityId +".json";
+		return execute(new HttpGet(path));
+
 	}
 
 }

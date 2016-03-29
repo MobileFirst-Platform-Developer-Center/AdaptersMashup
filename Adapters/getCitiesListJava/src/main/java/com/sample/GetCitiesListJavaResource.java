@@ -18,6 +18,7 @@ package com.sample;
 import java.net.URLEncoder;
 import java.sql.*;
 import java.io.IOException;
+import java.util.logging.Logger;
 
 import com.ibm.json.java.JSONArray;
 import com.ibm.json.java.JSONObject;
@@ -52,6 +53,7 @@ public class GetCitiesListJavaResource {
 	public String doGetCitiesList() throws SQLException, IOException{
 		// Run a query to get cities data from fatabase + for each city use a JavaScript adapter
 		// to fetch data from a weather webservice and put it all in a jsonArray object
+
 		JSONArray jsonArr = new JSONArray();
 		String getWeatherInfoProcedureURL;
 
@@ -60,14 +62,15 @@ public class GetCitiesListJavaResource {
 		ResultSet rs = getAllCities.executeQuery();
 		while (rs.next()) {
 			/* Calling another Java adapter procedure to get the weather of the current city */
-			getWeatherInfoProcedureURL = "/getCityWeatherJava?cityId="+ URLEncoder.encode(rs.getString("identifier"), "UTF-8");
+			getWeatherInfoProcedureURL = "/getCityWeatherJava?cityId=" + URLEncoder.encode(rs.getString("identifier"), "UTF-8");
 			HttpUriRequest req = new HttpGet(getWeatherInfoProcedureURL);
 			HttpResponse response = adaptersAPI.executeAdapterRequest(req);
 			JSONObject jsonWeather = adaptersAPI.getResponseAsJSON(response);
 
-			/* iterating through the response to get only the weather as string (rss.channel.item.description) */
-			JSONObject rss = (JSONObject) jsonWeather.get("rss");
-			JSONObject channel = (JSONObject) rss.get("channel");
+			/* iterating through the response to get only the weather as string (query.results.channel.item.description) */
+			JSONObject query = (JSONObject) jsonWeather.get("query");
+			JSONObject results = (JSONObject) query.get("results");
+			JSONObject channel = (JSONObject) results.get("channel");
 			JSONObject item = (JSONObject) channel.get("item");
 			String weatherSummary = (String) item.get("description");
 
@@ -81,6 +84,7 @@ public class GetCitiesListJavaResource {
 			/* Adding the JSONObject to a JSONArray that will be returned to the application */
 			jsonArr.add(jsonObj);
 		}
+		rs.close();
 		conn.close();
 		return jsonArr.toString();
 	}
