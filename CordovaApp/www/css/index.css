@@ -93,3 +93,11 @@ h1 {
 button:focus {
     outline: none;
 }
+
+#resultDiv {
+	width: 100%;
+	height: 200px;
+	padding-top:20px;
+	text-align: center;
+	font-size: 18px;
+}

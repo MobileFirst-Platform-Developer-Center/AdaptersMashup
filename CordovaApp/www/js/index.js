@@ -14,7 +14,7 @@
 * limitations under the License.
 */
 //var busyIndicator = null;
-var citiesList = null;
+var currenciesList = null;
 
 var Messages = {
     // Add here your messages for the default language.
@@ -29,73 +29,77 @@ var wlInitOptions = {
 
 // Called automatically after MFP framework initialization by WL.Client.init(wlInitOptions).
 function wlCommonInit(){
-  $('#citiesList').change(citySelectionChange);
-  document.getElementById("JsToJsButton").addEventListener("click", getCitiesList_JsToJs, false);
-  document.getElementById("JavaToJsButton").addEventListener("click", getCitiesList_JavaToJs, false);
-  document.getElementById("JavaToJavaButton").addEventListener("click", getCitiesList_JavaToJava, false);
-  getCitiesList_JsToJs();
+  document.getElementById("JsToJsButton").addEventListener("click", getCurrenciesList_JsToJs, false);
+  //document.getElementById("JavaToJsButton").addEventListener("click", getCurrenciesList_JavaToJs, false);
+  //document.getElementById("JavaToJavaButton").addEventListener("click", getCurrenciesList_JavaToJava, false);
+  document.getElementById("calculate").addEventListener("click", calculate, false);
+  getCurrenciesList_JsToJs();
 }
 
-var app = {
-    // Application Constructor
-    initialize: function() {
-        this.bindEvents();
-    },
-
-    // Bind any events that are required on startup. Common events are:
-    // 'load', 'deviceready', 'offline', and 'online'.
-    bindEvents: function() {
-        document.addEventListener('deviceready', this.onDeviceReady, false);
-    },
-
-    // The scope of 'this' is the event. In order to call the 'receivedEvent'
-    // function, 'app.receivedEvent(...);' must be explicitly called.
-    onDeviceReady: function() {
-        app.receivedEvent('deviceready');
-    },
-
-    // Update the DOM on a received event.
-    receivedEvent: function(id) {
-        var parentElement = document.getElementById(id);
-    }
-};
-
-app.initialize();
-
-//***************************************************
-// JS adapter -> JS adapter
-//***************************************************
-function getCitiesList_JsToJs() {
-  var resourceRequest = new WLResourceRequest("/adapters/getCitiesListJS/getCitiesWeather", WLResourceRequest.GET, 30000);
-  resourceRequest.send().then(
-    getCitiesListSuccess,
-    getCitiesListFailure
+function getCurrenciesList_JsToJs(){
+  var resourceRequest = new WLResourceRequest("/adapters/SQLAdapterJS/getCurrenciesList", WLResourceRequest.GET, 3000);
+  resourceRequest.send()
+  .then(
+    function(response){
+		var resultSet = response.responseJSON.resultSet;
+  		if (resultSet.length == 0)
+			alert("resultSet is empty");
+		else {
+			currenciesList = resultSet;
+			fillCurrenciesLists();
+		}
+	},
+    function(errorResponse){
+		alert("getListFailure\n"+ JSON.stringify(errorResponse));
+	}
   );
-  switchButtonsFocus("JsToJsButton");
+  //switchButtonsFocus("JsToJsButton");
 }
 
-//***************************************************
-// Java adapter -> JS adapter
-//***************************************************
-function getCitiesList_JavaToJs() {
-	var resourceRequest = new WLResourceRequest("/adapters/getCitiesListJavaToJS/getCitiesList_JavaToJS", WLResourceRequest.GET, 30000);
-	resourceRequest.send().then(
-		getCitiesListSuccess,
-		getCitiesListFailure
-	);
-	switchButtonsFocus("JavaToJsButton");
+function fillCurrenciesLists(){
+	document.getElementById("fromCurrencyList").options.length=0;
+	document.getElementById("toCurrencyList").options.length=0;
+	
+	for (var i = 0; i < currenciesList.length; i++) {
+		if(currenciesList[i].id == 3){ // Euro
+			document.getElementById("fromCurrencyList").options[i] = new Option(currenciesList[i].name, currenciesList[i].id, false, true);
+		}
+		else{
+			document.getElementById("fromCurrencyList").options[i] = new Option(currenciesList[i].name, currenciesList[i].id, false, false);
+		}
+		
+		if(currenciesList[i].id == 5){ // USD (US Dollar)
+			document.getElementById("toCurrencyList").options[i] = new Option(currenciesList[i].name, currenciesList[i].id, false, true);
+		}
+		else{
+			document.getElementById("toCurrencyList").options[i] = new Option(currenciesList[i].name, currenciesList[i].id, false, false);
+		}
+	}
 }
 
-//***************************************************
-// Java adapter -> Java adapter
-//***************************************************
-function getCitiesList_JavaToJava() {
-	var resourceRequest = new WLResourceRequest("/adapters/getCitiesListJava/getCitiesList_JavaToJava", WLResourceRequest.GET, 30000);
-	resourceRequest.send().then(
-		getCitiesListSuccess,
-		getCitiesListFailure
-	);
-	switchButtonsFocus("JavaToJavaButton");
+function calculate(){	
+	var fromCurrencyId = document.getElementById('fromCurrencyList').value;
+	var toCurrencyId = document.getElementById('toCurrencyList').value;
+	var amount = document.getElementById("amount").value
+						
+	var resourceRequest = new WLResourceRequest("/adapters/SQLAdapterJS/getExchangeRate", WLResourceRequest.GET, 3000);
+	resourceRequest.setQueryParameter("params", "['"+ fromCurrencyId +"','"+ toCurrencyId +"']");
+  	resourceRequest.send().then(
+    // Success
+	function(response){
+		var fromCurrencySymbol = response.responseJSON.base;
+		var toCurrencySymbol = Object.keys(response.responseJSON.rates)[0];
+		var exchangeRate = eval("response.responseJSON.rates."+ Object.keys(response.responseJSON.rates)[0]);
+		var sum = parseFloat(exchangeRate) * parseFloat(amount);
+		var resultStr = "<b>"+ parseFloat(amount).toFixed(2) + "</b> " + fromCurrencySymbol 
+						+ "<br>=<br><b>" 
+						+ sum.toFixed(2) + "</b> " + toCurrencySymbol;
+		document.getElementById("resultDiv").innerHTML = resultStr;
+	},
+	// Failure
+    function(errorResponse){
+		alert("getExchangeRate Failure\n"+ JSON.stringify(errorResponse));
+	})	
 }
 
 //***************************************************
@@ -122,28 +126,17 @@ function getCitiesListSuccess(response) {
 }
 
 //***************************************************
-// getCitiesListFailure (resourceRequest failure)
-//***************************************************
-function getCitiesListFailure(response) {
-	WL.Logger.debug("CityWeather::getCitiesListFailure");
-	WL.SimpleDialog.show("CityWeather",
-			"Error: "+ JSON.stringify(response), [ {
-				text : 'Reload app',
-				handler : WL.Client.reloadApp
-			} ]);
-}
-
-//***************************************************
 // fillCitiesList
 //***************************************************
 /* This function fills the cities select drop-down box with the received cities-list */
 function fillCitiesList(){
-	$('#citiesList').empty();
+	/*$('#citiesList').empty();
 	for (var i = 0; i < citiesList.length; i++) {
 		var elem = $("<option/>").html(citiesList[i].city);
 		$('#citiesList').append(elem);
 	}
-	citySelectionChange();
+	citySelectionChange();*/
+	
 }
 
 //***************************************************
