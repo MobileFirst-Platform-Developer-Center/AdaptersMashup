@@ -35,13 +35,16 @@ limitations under the License.
         </div>
         <div id="wrapper">
             <h4 id="subTitle"></h4>
-            <label for="fromCurrencyList">Amount: </label>
-            <input type="text" id="amount" /><br />
-            <label for="fromCurrencyList">From: </label>
-            <select id="fromCurrencyList"></select><br />
-            <label for="toCurrencyList">To: </label>
-            <select id="toCurrencyList"></select><br />
-            <button id="calculate">Calculate</button>
+            <div id="inputsDiv">
+                <p>Amount: <input type="text" id="amount" size="5" value="1"/></p>
+                From: <select id="fromCurrencyList">
+                    <option value="0">Convert From</option>
+                </select><br />
+                <span id="ConvertToSpanLabel">To:</span> <select id="toCurrencyList">
+                    <option value="0">Convert To</option>
+                </select><br />
+                <p><button id="calculate">Calculate</button></p>
+            </div>
             <div id="resultDiv"></div>
             <div align="center">
                 <button id="JsToJsButton" class="AdapterTypeButton">JS adapter -> JS adapter</button>
