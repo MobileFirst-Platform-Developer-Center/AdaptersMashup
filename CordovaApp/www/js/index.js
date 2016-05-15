@@ -121,13 +121,24 @@ function calculate(){
     	// Success
 		function(response){
 			var fromCurrencySymbol = response.responseJSON.base;
-			var toCurrencySymbol = Object.keys(response.responseJSON.rates)[0];
-			var exchangeRate = eval("response.responseJSON.rates."+ Object.keys(response.responseJSON.rates)[0]);
-			var sum = parseFloat(exchangeRate) * parseFloat(amount);
-			var resultStr = "<b>"+ parseFloat(amount).toFixed(2) + "</b> " + fromCurrencySymbol 
+			// If the selected symbols (convert from & convert to) are identical 
+			// then the 'rates' returned object will be empty, so we won't be able to use 'Object.keys(response.responseJSON.rates)[0]'
+			// - so we have to check it first.
+			if(fromCurrencyId == toCurrencyId) {
+				var resultStr = "<b>"+ parseFloat(amount).toFixed(2) + "</b> " + fromCurrencySymbol 
+							+ "<br>=<br><b>" 
+							+ parseFloat(amount).toFixed(2) + "</b> " + fromCurrencySymbol;
+				document.getElementById("resultDiv").innerHTML = resultStr;
+			}
+			else {
+				var toCurrencySymbol = Object.keys(response.responseJSON.rates)[0];
+				var exchangeRate = eval("response.responseJSON.rates."+ Object.keys(response.responseJSON.rates)[0]);
+				var sum = parseFloat(exchangeRate) * parseFloat(amount);
+				var resultStr = "<b>"+ parseFloat(amount).toFixed(2) + "</b> " + fromCurrencySymbol 
 							+ "<br>=<br><b>" 
 							+ sum.toFixed(2) + "</b> " + toCurrencySymbol;
-			document.getElementById("resultDiv").innerHTML = resultStr;
+				document.getElementById("resultDiv").innerHTML = resultStr;
+			}			
 		},
 		// Failure
     	function(errorResponse){
@@ -145,7 +156,6 @@ function switchButtonsFocus(ButtonId){
 	if(ButtonId == "JsToJsButton"){
     	if($('#JsToJsButton').hasClass("AdapterTypeButton")){
     		$('#JsToJsButton').removeClass("AdapterTypeButton").addClass("AdapterTypeButtonSelected");
-    		$('#subTitle').html("(JS adapter -> JS adapter)");
     	}
     	if($('#JavaToJsButton').hasClass("AdapterTypeButtonSelected")){
     		$('#JavaToJsButton').removeClass("AdapterTypeButtonSelected").addClass("AdapterTypeButton");
@@ -158,7 +168,6 @@ function switchButtonsFocus(ButtonId){
     else if(ButtonId == "JavaToJsButton"){
     	if($('#JavaToJsButton').hasClass("AdapterTypeButton")){
     		$('#JavaToJsButton').removeClass("AdapterTypeButton").addClass("AdapterTypeButtonSelected");
-    		$('#subTitle').html("(Java adapter -> JS adapter)");
     	}
     	if($('#JsToJsButton').hasClass("AdapterTypeButtonSelected")){
     		$('#JsToJsButton').removeClass("AdapterTypeButtonSelected").addClass("AdapterTypeButton");
@@ -171,7 +180,6 @@ function switchButtonsFocus(ButtonId){
     else if(ButtonId == "JavaToJavaButton"){
     	if($('#JavaToJavaButton').hasClass("AdapterTypeButton")){
     		$('#JavaToJavaButton').removeClass("AdapterTypeButton").addClass("AdapterTypeButtonSelected");
-    		$('#subTitle').html("(Java adapter -> Java adapter)");
     	}
     	if($('#JsToJsButton').hasClass("AdapterTypeButtonSelected")){
     		$('#JsToJsButton').removeClass("AdapterTypeButtonSelected").addClass("AdapterTypeButton");
