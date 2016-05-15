@@ -84,18 +84,13 @@ function fillCurrenciesLists(){
 	document.getElementById("toCurrencyList").options.length=0;
 
 	for (var i = 0; i < currenciesList.length; i++) {
+		document.getElementById("fromCurrencyList").options[i] = new Option(currenciesList[i].name, currenciesList[i].id, false, false);
+		document.getElementById("toCurrencyList").options[i] = new Option(currenciesList[i].name, currenciesList[i].id, false, false);
 		if(currenciesList[i].id == 3){ // Euro
-			document.getElementById("fromCurrencyList").options[i+1] = new Option(currenciesList[i].name, currenciesList[i].id, false, true);
-		}
-		else{
-			document.getElementById("fromCurrencyList").options[i+1] = new Option(currenciesList[i].name, currenciesList[i].id, false, false);
-		}
-		
-		if(currenciesList[i].id == 5){ // USD (US Dollar)
-			document.getElementById("toCurrencyList").options[i+1] = new Option(currenciesList[i].name, currenciesList[i].id, false, true);
-		}
-		else{
-			document.getElementById("toCurrencyList").options[i+1] = new Option(currenciesList[i].name, currenciesList[i].id, false, false);
+			document.getElementById("fromCurrencyList").options[i].selected = true;
+		}		
+		else if(currenciesList[i].id == 5){ // USD (US Dollar)
+			document.getElementById("toCurrencyList").options[i].selected = true;
 		}
 	}
 }
@@ -103,7 +98,7 @@ function fillCurrenciesLists(){
 //***************************************************
 // calculate
 //***************************************************
-function calculate(){	
+function calculate(){
 	var fromCurrencyId = document.getElementById('fromCurrencyList').value;
 	var toCurrencyId = document.getElementById('toCurrencyList').value;
 	var amount = document.getElementById("amount").value
@@ -116,26 +111,12 @@ function calculate(){
 		resourceRequest.setQueryParameter("params", "['"+ fromCurrencyId +"','"+ toCurrencyId +"']");
   		resourceRequest.send().then(
     	// Success
-		function(response){
-			var fromCurrencySymbol = response.responseJSON.base;
-			// If the selected symbols (convert from & convert to) are identical 
-			// then the 'rates' returned object will be empty, so we won't be able to use 'Object.keys(response.responseJSON.rates)[0]'
-			// - so we have to check it first.
-			if(fromCurrencyId == toCurrencyId) {
-				var resultStr = "<b>"+ parseFloat(amount).toFixed(2) + "</b> " + fromCurrencySymbol 
-							+ "<br>=<br><b>" 
-							+ parseFloat(amount).toFixed(2) + "</b> " + fromCurrencySymbol;
-				document.getElementById("resultDiv").innerHTML = resultStr;
-			}
-			else {
-				var toCurrencySymbol = Object.keys(response.responseJSON.rates)[0];
-				var exchangeRate = eval("response.responseJSON.rates."+ Object.keys(response.responseJSON.rates)[0]);
-				var sum = parseFloat(exchangeRate) * parseFloat(amount);
-				var resultStr = "<b>"+ parseFloat(amount).toFixed(2) + "</b> " + fromCurrencySymbol 
-							+ "<br>=<br><b>" 
-							+ sum.toFixed(2) + "</b> " + toCurrencySymbol;
-				document.getElementById("resultDiv").innerHTML = resultStr;
-			}			
+		function(response){			
+			var exchangeRate = response.responseJSON.exchangeRate;
+			var total = parseFloat(exchangeRate) * parseFloat(amount);
+
+			document.getElementById("resultDiv").innerHTML = amount + " " + response.responseJSON.base + "<br>=<br>"
+															+ total.toFixed(2) + " "+ response.responseJSON.target;
 		},
 		// Failure
     	function(errorResponse){
