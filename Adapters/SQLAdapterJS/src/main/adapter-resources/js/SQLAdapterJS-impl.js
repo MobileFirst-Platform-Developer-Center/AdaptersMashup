@@ -58,5 +58,5 @@ function getExchangeRate(fromId, toId){
 			ExchangeRate = eval("fixerExchangeRateJSON.rates."+ exchangeTo);
 		}
 
-    return {"base":base, "exchangeTo":exchangeTo, "ExchangeRate":ExchangeRate};
+    return {"base":base, "target":exchangeTo, "exchangeRate":ExchangeRate};
 }
