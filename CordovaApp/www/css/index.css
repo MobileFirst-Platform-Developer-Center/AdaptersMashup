@@ -53,8 +53,7 @@ h1 {
   padding-bottom: 25px;
 }
 
-#wrapper select {
-	color: #1D4D90;
+select {
 	padding: 2px;
 	width: 70%;
 }
