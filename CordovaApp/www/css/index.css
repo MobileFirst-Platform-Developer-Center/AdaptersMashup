@@ -95,11 +95,11 @@ button:focus {
 
 #inputsDiv {
 	width: 100%;
-	text-align: center;
+	text-align: left;
 }
 
 #ConvertToSpanLabel {
-	padding-left:20px;
+	padding-left:19px;
 }
 
 #resultDiv {
