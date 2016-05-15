@@ -82,10 +82,7 @@ function getCurrenciesList_JavaToJava(){
 function fillCurrenciesLists(){
 	document.getElementById("fromCurrencyList").options.length=0;
 	document.getElementById("toCurrencyList").options.length=0;
-	
-	//document.getElementById("fromCurrencyList").options[0] = new Option("- Convert From -", "0", false, false);
-	//document.getElementById("toCurrencyList").options[0] = new Option("- Convert To -", "0", false, false);
-	
+
 	for (var i = 0; i < currenciesList.length; i++) {
 		if(currenciesList[i].id == 3){ // Euro
 			document.getElementById("fromCurrencyList").options[i+1] = new Option(currenciesList[i].name, currenciesList[i].id, false, true);
