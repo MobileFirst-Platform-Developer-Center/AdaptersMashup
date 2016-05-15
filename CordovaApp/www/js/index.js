@@ -27,15 +27,21 @@ var wlInitOptions = {
     // For initialization options please refer to IBM MobileFirst Platform Foundation Knowledge Center.
 };
 
-// Called automatically after MFP framework initialization by WL.Client.init(wlInitOptions).
+//***************************************************
+// wlCommonInit
+// - Called automatically after MFP framework initialization by WL.Client.init(wlInitOptions).
+//***************************************************
 function wlCommonInit(){
   document.getElementById("JsToJsButton").addEventListener("click", getCurrenciesList_JsToJs, false);
-  //document.getElementById("JavaToJsButton").addEventListener("click", getCurrenciesList_JavaToJs, false);
-  //document.getElementById("JavaToJavaButton").addEventListener("click", getCurrenciesList_JavaToJava, false);
+  document.getElementById("JavaToJsButton").addEventListener("click", getCurrenciesList_JavaToJS, false);
+  document.getElementById("JavaToJavaButton").addEventListener("click", getCurrenciesList_JavaToJava, false);
   document.getElementById("calculate").addEventListener("click", calculate, false);
   getCurrenciesList_JsToJs();
 }
 
+//***************************************************
+// getCurrenciesList_JsToJs
+//***************************************************
 function getCurrenciesList_JsToJs(){
   var resourceRequest = new WLResourceRequest("/adapters/SQLAdapterJS/getCurrenciesList", WLResourceRequest.GET, 3000);
   resourceRequest.send()
@@ -53,9 +59,26 @@ function getCurrenciesList_JsToJs(){
 		alert("getListFailure\n"+ JSON.stringify(errorResponse));
 	}
   );
-  //switchButtonsFocus("JsToJsButton");
+  switchButtonsFocus("JsToJsButton");
 }
 
+//***************************************************
+// getCurrenciesList_JavaToJS
+//***************************************************
+function getCurrenciesList_JavaToJS(){
+	alert("getCurrenciesList_JavaToJS");
+}
+
+//***************************************************
+// getCurrenciesList_JavaToJava
+//***************************************************
+function getCurrenciesList_JavaToJava(){
+	alert("getCurrenciesList_JavaToJava");
+}
+
+//***************************************************
+// fillCurrenciesLists
+//***************************************************
 function fillCurrenciesLists(){
 	document.getElementById("fromCurrencyList").options.length=0;
 	document.getElementById("toCurrencyList").options.length=0;
@@ -77,79 +100,38 @@ function fillCurrenciesLists(){
 	}
 }
 
+//***************************************************
+// calculate
+//***************************************************
 function calculate(){	
 	var fromCurrencyId = document.getElementById('fromCurrencyList').value;
 	var toCurrencyId = document.getElementById('toCurrencyList').value;
 	var amount = document.getElementById("amount").value
-						
-	var resourceRequest = new WLResourceRequest("/adapters/SQLAdapterJS/getExchangeRate", WLResourceRequest.GET, 3000);
-	resourceRequest.setQueryParameter("params", "['"+ fromCurrencyId +"','"+ toCurrencyId +"']");
-  	resourceRequest.send().then(
-    // Success
-	function(response){
-		var fromCurrencySymbol = response.responseJSON.base;
-		var toCurrencySymbol = Object.keys(response.responseJSON.rates)[0];
-		var exchangeRate = eval("response.responseJSON.rates."+ Object.keys(response.responseJSON.rates)[0]);
-		var sum = parseFloat(exchangeRate) * parseFloat(amount);
-		var resultStr = "<b>"+ parseFloat(amount).toFixed(2) + "</b> " + fromCurrencySymbol 
-						+ "<br>=<br><b>" 
-						+ sum.toFixed(2) + "</b> " + toCurrencySymbol;
-		document.getElementById("resultDiv").innerHTML = resultStr;
-	},
-	// Failure
-    function(errorResponse){
-		alert("getExchangeRate Failure\n"+ JSON.stringify(errorResponse));
-	})	
-}
-
-//***************************************************
-// getCitiesListSuccess (resourceRequest success)
-//***************************************************
-function getCitiesListSuccess(response) {
-	/* The response from JS adapters is different from the response that we receive from our Java adapters,
-	 * JS adapters return response.responseJSON.resultSet while Java adapters return only response.responseJSON
-	 * So first we check the response to decide what is the resultSet that we wish to use.
-	 */
-	if(response.responseJSON.resultSet != "undefined" && response.responseJSON.resultSet != null){
-		var resultSet = response.responseJSON.resultSet;
-	}
-	else{
-		var resultSet = response.responseJSON;
-	}
-
-	if (resultSet.length == 0)
-		getCitiesListFailure();
-	else {
-		citiesList = resultSet;
-		fillCitiesList();
-	}
-}
-
-//***************************************************
-// fillCitiesList
-//***************************************************
-/* This function fills the cities select drop-down box with the received cities-list */
-function fillCitiesList(){
-	/*$('#citiesList').empty();
-	for (var i = 0; i < citiesList.length; i++) {
-		var elem = $("<option/>").html(citiesList[i].city);
-		$('#citiesList').append(elem);
-	}
-	citySelectionChange();*/
 	
+	if(amount == null || amount == "" || isNaN(amount)) {
+		alert("Please enter a valid amount");
+	}
+	else {
+		var resourceRequest = new WLResourceRequest("/adapters/SQLAdapterJS/getExchangeRate", WLResourceRequest.GET, 3000);
+		resourceRequest.setQueryParameter("params", "['"+ fromCurrencyId +"','"+ toCurrencyId +"']");
+  		resourceRequest.send().then(
+    	// Success
+		function(response){
+			var fromCurrencySymbol = response.responseJSON.base;
+			var toCurrencySymbol = Object.keys(response.responseJSON.rates)[0];
+			var exchangeRate = eval("response.responseJSON.rates."+ Object.keys(response.responseJSON.rates)[0]);
+			var sum = parseFloat(exchangeRate) * parseFloat(amount);
+			var resultStr = "<b>"+ parseFloat(amount).toFixed(2) + "</b> " + fromCurrencySymbol 
+							+ "<br>=<br><b>" 
+							+ sum.toFixed(2) + "</b> " + toCurrencySymbol;
+			document.getElementById("resultDiv").innerHTML = resultStr;
+		},
+		// Failure
+    	function(errorResponse){
+			alert("getExchangeRate Failure\n"+ JSON.stringify(errorResponse));
+		})	
+	}	
 }
-
-//***************************************************
-// citySelectionChange
-//***************************************************
-/* This function changes the content of the page after the selected city has been changed */
-function citySelectionChange() {
-	var index = $('#citiesList').prop("selectedIndex");
-	var citySumm = citiesList[index].summary;
-	var cityWeather = citiesList[index].weather;
-	$('#info').html(cityWeather + "<br>" + citySumm.slice(0, 200) + "...");
-}
-
 
 //***************************************************
 // switchButtonsFocus
@@ -160,7 +142,7 @@ function switchButtonsFocus(ButtonId){
 	if(ButtonId == "JsToJsButton"){
     	if($('#JsToJsButton').hasClass("AdapterTypeButton")){
     		$('#JsToJsButton').removeClass("AdapterTypeButton").addClass("AdapterTypeButtonSelected");
-    		$('#subTitle').html("(Js adapter -> JS adapter)");
+    		$('#subTitle').html("(JS adapter -> JS adapter)");
     	}
     	if($('#JavaToJsButton').hasClass("AdapterTypeButtonSelected")){
     		$('#JavaToJsButton').removeClass("AdapterTypeButtonSelected").addClass("AdapterTypeButton");
