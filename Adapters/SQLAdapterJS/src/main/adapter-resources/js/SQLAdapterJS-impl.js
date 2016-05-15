@@ -44,14 +44,19 @@ function getCurrencySymbol(currency_id) {
 function getExchangeRate(fromId, toId){
     base = getCurrencySymbol(fromId).resultSet[0].symbol;
     exchangeTo = getCurrencySymbol(toId).resultSet[0].symbol;
+		ExchangeRate = null;
 
-    return MFP.Server.invokeProcedure({
-    	adapter : 'HTTPAdapterJS',
-    	procedure : 'getExchangeRate',
-    	parameters : [base, exchangeTo]
-    });
+		if(base == exchangeTo){
+			ExchangeRate = 1;
+		}
+		else {
+			var fixerExchangeRateJSON =  MFP.Server.invokeProcedure({
+	    	adapter : 'HTTPAdapterJS',
+	    	procedure : 'getExchangeRate',
+	    	parameters : [base, exchangeTo]
+	    });
+			ExchangeRate = eval("fixerExchangeRateJSON.rates."+ exchangeTo);
+		}
+
+    return {"base":base, "exchangeTo":exchangeTo, "ExchangeRate":ExchangeRate};
 }
-
-
-
-
