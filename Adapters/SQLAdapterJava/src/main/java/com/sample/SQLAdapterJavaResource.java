@@ -14,6 +14,7 @@ import com.ibm.mfp.adapter.api.ConfigurationAPI;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import java.io.IOException;
 import java.sql.Connection;
@@ -58,5 +59,39 @@ public class SQLAdapterJavaResource {
 		rs.close();
 		conn.close();
 		return jsonArr.toString();
+	}
+
+	private String getCurrencySymbol(Integer currency_id) throws SQLException, IOException {
+		String symbol = null;
+		Connection conn = getSQLConnection();
+		PreparedStatement getSymbol = null;
+		getSymbol = conn.prepareStatement("select symbol from currencies where id="+ currency_id);
+		ResultSet rs = getSymbol.executeQuery();
+		while (rs.next()) {
+			symbol = rs.getString("symbol");
+		}
+		return symbol;
+	}
+
+	@GET
+	@Path("/getExchangeRate_JavaToJava")
+	public String getExchangeRate(@QueryParam("fromCurrencyId") Integer fromCurrencyId, @QueryParam("toCurrencyId") Integer toCurrencyId) throws SQLException, IOException{
+		String base = getCurrencySymbol(fromCurrencyId);
+		String exchangeTo = getCurrencySymbol(toCurrencyId);
+		Double ExchangeRate = null;
+
+		if(base.equals(exchangeTo)){
+			ExchangeRate = 1.0;
+		}
+		else{
+			ExchangeRate = 2.0;
+		}
+
+		JSONObject jsonObj = new JSONObject();
+		jsonObj.put("base", base);
+		jsonObj.put("target", exchangeTo);
+		jsonObj.put("exchangeRate", ExchangeRate.toString());
+
+		return jsonObj.toString();
 	}
 }
