@@ -44,7 +44,6 @@ function wlCommonInit(){
 // getCurrenciesList_JsToJs
 //***************************************************
 function getCurrenciesList_JsToJs(){
-	alert(CURRENT_FLOW);
   var resourceRequest = new WLResourceRequest("/adapters/SQLAdapterJS/getCurrenciesList", WLResourceRequest.GET, 3000);
   resourceRequest.send()
   .then(
@@ -75,7 +74,6 @@ function getCurrenciesList_JavaToJS(){
 // getCurrenciesList_JavaToJava
 //***************************************************
 function getCurrenciesList_JavaToJava(){
-	alert(CURRENT_FLOW);
 	var resourceRequest = new WLResourceRequest("/adapters/SQLAdapterJava/getCurrenciesList_JavaToJava", WLResourceRequest.GET, 3000);
   	resourceRequest.send().then(
     	function(response){
