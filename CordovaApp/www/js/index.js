@@ -15,6 +15,7 @@
 */
 //var busyIndicator = null;
 var currenciesList = null;
+var CURRENT_FLOW = "JsToJs";
 
 var Messages = {
     // Add here your messages for the default language.
@@ -43,6 +44,7 @@ function wlCommonInit(){
 // getCurrenciesList_JsToJs
 //***************************************************
 function getCurrenciesList_JsToJs(){
+	alert(CURRENT_FLOW);
   var resourceRequest = new WLResourceRequest("/adapters/SQLAdapterJS/getCurrenciesList", WLResourceRequest.GET, 3000);
   resourceRequest.send()
   .then(
@@ -73,7 +75,23 @@ function getCurrenciesList_JavaToJS(){
 // getCurrenciesList_JavaToJava
 //***************************************************
 function getCurrenciesList_JavaToJava(){
-	alert("getCurrenciesList_JavaToJava");
+	alert(CURRENT_FLOW);
+	var resourceRequest = new WLResourceRequest("/adapters/SQLAdapterJava/getCurrenciesList_JavaToJava", WLResourceRequest.GET, 3000);
+  	resourceRequest.send().then(
+    	function(response){
+			var resultSet = response.responseJSON;
+  			if (resultSet.length == 0)
+				alert("response is empty");
+			else {
+				currenciesList = resultSet;
+				fillCurrenciesLists();
+			}
+		},
+    	function(errorResponse){
+			alert("getListFailure\n"+ JSON.stringify(errorResponse));
+		}
+  	);
+  	switchButtonsFocus("JavaToJavaButton");
 }
 
 //***************************************************
@@ -107,8 +125,15 @@ function calculate(){
 		alert("Please enter a valid amount");
 	}
 	else {
-		var resourceRequest = new WLResourceRequest("/adapters/SQLAdapterJS/getExchangeRate", WLResourceRequest.GET, 3000);
-		resourceRequest.setQueryParameter("params", "['"+ fromCurrencyId +"','"+ toCurrencyId +"']");
+		if(CURRENT_FLOW == "JavaToJava") {
+			var resourceRequest = new WLResourceRequest("/adapters/SQLAdapterJava/getExchangeRate_JavaToJava", WLResourceRequest.GET, 3000);
+			resourceRequest.setQueryParameter("fromCurrencyId", fromCurrencyId);
+			resourceRequest.setQueryParameter("toCurrencyId", toCurrencyId);
+		}
+		else {
+			var resourceRequest = new WLResourceRequest("/adapters/SQLAdapterJS/getExchangeRate", WLResourceRequest.GET, 3000);
+			resourceRequest.setQueryParameter("params", "['"+ fromCurrencyId +"','"+ toCurrencyId +"']");
+		}		
   		resourceRequest.send().then(
     	// Success
 		function(response){			
@@ -132,6 +157,7 @@ function calculate(){
 function switchButtonsFocus(ButtonId){
     /* JS -> JS */
 	if(ButtonId == "JsToJsButton"){
+		CURRENT_FLOW = "JsToJs";
     	if($('#JsToJsButton').hasClass("AdapterTypeButton")){
     		$('#JsToJsButton').removeClass("AdapterTypeButton").addClass("AdapterTypeButtonSelected");
     	}
@@ -144,6 +170,7 @@ function switchButtonsFocus(ButtonId){
     }
 	/* Java -> JS */
     else if(ButtonId == "JavaToJsButton"){
+		CURRENT_FLOW = "JavaToJS";
     	if($('#JavaToJsButton').hasClass("AdapterTypeButton")){
     		$('#JavaToJsButton').removeClass("AdapterTypeButton").addClass("AdapterTypeButtonSelected");
     	}
@@ -156,6 +183,7 @@ function switchButtonsFocus(ButtonId){
     }
 	/* Java -> Java */
     else if(ButtonId == "JavaToJavaButton"){
+		CURRENT_FLOW = "JavaToJava";
     	if($('#JavaToJavaButton').hasClass("AdapterTypeButton")){
     		$('#JavaToJavaButton').removeClass("AdapterTypeButton").addClass("AdapterTypeButtonSelected");
     	}
