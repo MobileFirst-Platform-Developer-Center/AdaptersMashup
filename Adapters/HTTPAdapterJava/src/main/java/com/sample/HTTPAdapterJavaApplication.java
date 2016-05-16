@@ -17,6 +17,7 @@
 package com.sample;
 
 import com.ibm.mfp.adapter.api.MFPJAXRSApplication;
+
 import java.util.logging.Logger;
 
 public class HTTPAdapterJavaApplication extends MFPJAXRSApplication{
