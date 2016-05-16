@@ -27,13 +27,9 @@ limitations under the License.
     <module>getCitiesListJava</module>
     <module>getCityWeatherJava</module>
     <module>getCitiesListJavaToJS</module>
-    <module>getCurrenciesListJS</module>
-    <module>getExchangeRateJS</module>
-    <module>getCurrenciesListJava</module>
-    <module>getExchangeRateJava</module>
-    <module>getCurrenciesListJavaToJS</module>
     <module>SQLAdapterJS</module>
     <module>HTTPAdapterJS</module>
+    <module>SQLAdapterJava</module>
   </modules>
 
 	<properties>
