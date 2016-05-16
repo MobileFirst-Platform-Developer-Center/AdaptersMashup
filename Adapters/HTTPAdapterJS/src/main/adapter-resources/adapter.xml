@@ -33,6 +33,6 @@ limitations under the License.
 	</connectivity>
 
 	<!-- Procedures -->
-	<procedure name="getExchangeRate" secured="false"/>
+	<procedure name="getExchangeRate"/>
 
 </mfp:adapter>

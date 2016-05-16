@@ -37,8 +37,8 @@ limitations under the License.
 	</connectivity>
 
 	<!-- procedures -->
-	<procedure name="getCurrenciesList" secured="false"/>
-	<procedure name="getCurrencySymbol" secured="false"/>
-	<procedure name="getExchangeRate" secured="false"/>
+	<procedure name="getCurrenciesList"/>
+	<procedure name="getCurrencySymbol"/>
+	<procedure name="getExchangeRate"/>
 
 </mfp:adapter>
