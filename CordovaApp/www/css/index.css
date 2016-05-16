@@ -102,6 +102,10 @@ button:focus {
 	padding-left:19px;
 }
 
+#ToCurrencyDiv{
+	padding-top: 8px;
+}
+
 #resultDiv {
 	width: 100%;
 	height: 140px;
