@@ -11,12 +11,16 @@ import com.ibm.json.java.JSONArray;
 import com.ibm.json.java.JSONObject;
 import com.ibm.mfp.adapter.api.AdaptersAPI;
 import com.ibm.mfp.adapter.api.ConfigurationAPI;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpUriRequest;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import java.io.IOException;
+import java.net.URLEncoder;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -84,13 +88,19 @@ public class SQLAdapterJavaResource {
 			ExchangeRate = 1.0;
 		}
 		else{
-			ExchangeRate = 2.0;
+			//ExchangeRate = 2.0;
+			String getFixerIOInfoProcedureURL = "/HTTPAdapterJava?fromCurrency="+ URLEncoder.encode(base, "UTF-8") +"&toCurrency="+ URLEncoder.encode(exchangeTo, "UTF-8");
+			HttpUriRequest req = new HttpGet(getFixerIOInfoProcedureURL);
+			HttpResponse response = adaptersAPI.executeAdapterRequest(req);
+			JSONObject jsonExchangeRate = adaptersAPI.getResponseAsJSON(response);
+			JSONObject rates = (JSONObject)jsonExchangeRate.get("rates");
+			ExchangeRate = (Double) rates.get(exchangeTo.toString());
 		}
 
 		JSONObject jsonObj = new JSONObject();
 		jsonObj.put("base", base);
 		jsonObj.put("target", exchangeTo);
-		jsonObj.put("exchangeRate", ExchangeRate.toString());
+		jsonObj.put("exchangeRate", ExchangeRate);
 
 		return jsonObj.toString();
 	}
