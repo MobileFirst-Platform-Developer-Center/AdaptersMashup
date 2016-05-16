@@ -45,7 +45,6 @@ public class SQLAdapterJavaResource {
 	@Path("/getCurrenciesList_JavaToJava")
 	public String getCurrenciesList() throws SQLException, IOException {
 		JSONArray jsonArr = new JSONArray();
-		//String getFixerCurrenciesProcedureURL;
 
 		Connection conn = getSQLConnection();
 		PreparedStatement getAllCities = conn.prepareStatement("select id, symbol, name from currencies");
