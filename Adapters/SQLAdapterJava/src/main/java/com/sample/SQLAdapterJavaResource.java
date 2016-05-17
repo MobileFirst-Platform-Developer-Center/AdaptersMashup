@@ -51,7 +51,7 @@ public class SQLAdapterJavaResource {
 	}
 
 	@GET
-	@Path("/getCurrenciesList_JavaToJava")
+	@Path("/getCurrenciesList")
 	public String getCurrenciesList() throws SQLException, IOException {
 		JSONArray jsonArr = new JSONArray();
 
@@ -82,12 +82,14 @@ public class SQLAdapterJavaResource {
 		while (rs.next()) {
 			symbol = rs.getString("symbol");
 		}
+		rs.close();
+		conn.close();
 		return symbol;
 	}
 
 	@GET
 	@Path("/getExchangeRate_JavaToJava")
-	public String getExchangeRate(@QueryParam("fromCurrencyId") Integer fromCurrencyId, @QueryParam("toCurrencyId") Integer toCurrencyId) throws SQLException, IOException{
+	public String getExchangeRate_JavaToJava(@QueryParam("fromCurrencyId") Integer fromCurrencyId, @QueryParam("toCurrencyId") Integer toCurrencyId) throws SQLException, IOException{
 		String base = getCurrencySymbol(fromCurrencyId);
 		String exchangeTo = getCurrencySymbol(toCurrencyId);
 		Double ExchangeRate = null;
@@ -102,7 +104,33 @@ public class SQLAdapterJavaResource {
 			HttpResponse response = adaptersAPI.executeAdapterRequest(req);
 			JSONObject jsonExchangeRate = adaptersAPI.getResponseAsJSON(response);
 			JSONObject rates = (JSONObject)jsonExchangeRate.get("rates");
-			ExchangeRate = (Double) rates.get(exchangeTo.toString());
+			ExchangeRate = (Double) rates.get(exchangeTo);
+		}
+
+		JSONObject jsonObj = new JSONObject();
+		jsonObj.put("base", base);
+		jsonObj.put("target", exchangeTo);
+		jsonObj.put("exchangeRate", ExchangeRate);
+
+		return jsonObj.toString();
+	}
+
+	@GET
+	@Path("/getExchangeRate_JavaToJS")
+	public String getExchangeRate_JavaToJS(@QueryParam("fromCurrencyId") Integer fromCurrencyId, @QueryParam("toCurrencyId") Integer toCurrencyId) throws SQLException, IOException{
+		String base = getCurrencySymbol(fromCurrencyId);
+		String exchangeTo = getCurrencySymbol(toCurrencyId);
+		Double ExchangeRate = null;
+
+		if(base.equals(exchangeTo)){
+			ExchangeRate = 1.0;
+		}
+		else{
+			HttpUriRequest req = adaptersAPI.createJavascriptAdapterRequest("HTTPAdapterJS", "getExchangeRate", URLEncoder.encode(base, "UTF-8"), URLEncoder.encode(exchangeTo, "UTF-8"));
+			org.apache.http.HttpResponse response = adaptersAPI.executeAdapterRequest(req);
+			JSONObject jsonExchangeRate = adaptersAPI.getResponseAsJSON(response);
+			JSONObject rates = (JSONObject)jsonExchangeRate.get("rates");
+			ExchangeRate = (Double) rates.get(exchangeTo);
 		}
 
 		JSONObject jsonObj = new JSONObject();
