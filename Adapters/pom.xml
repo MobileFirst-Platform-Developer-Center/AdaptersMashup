@@ -22,11 +22,6 @@ limitations under the License.
 	<packaging>pom</packaging>
 
 	<modules>
-		<module>getCitiesListJS</module>
-		<module>getCityWeatherJS</module>
-    <module>getCitiesListJava</module>
-    <module>getCityWeatherJava</module>
-    <module>getCitiesListJavaToJS</module>
     <module>SQLAdapterJS</module>
     <module>HTTPAdapterJS</module>
     <module>SQLAdapterJava</module>
