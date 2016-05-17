@@ -55,7 +55,7 @@ function getExchangeRate(fromId, toId){
 	    	procedure : 'getExchangeRate',
 	    	parameters : [base, exchangeTo]
 	    });
-			ExchangeRate = eval("fixerExchangeRateJSON.rates."+ exchangeTo);
+			ExchangeRate = fixerExchangeRateJSON.rates[exchangeTo];
 		}
 
     return {"base":base, "target":exchangeTo, "exchangeRate":ExchangeRate};
