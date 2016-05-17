@@ -13,73 +13,51 @@
 * See the License for the specific language governing permissions and
 * limitations under the License.
 */
-//var busyIndicator = null;
+
 var currenciesList = null;
-var CURRENT_FLOW = "JsToJs";
+var CURRENT_FLOW = "JsToJs"; 
+// CURRENT_FLOW optional values are:
+// 		JsToJs (JavaScript Adapter -> JavaScript Adapter), 
+// 		JavaToJs (Java Adapter -> JavaScript Adapter), 
+// 		JavaToJava (Java Adapter -> Java Adapter)
 
-var Messages = {
-    // Add here your messages for the default language.
-    // Generate a similar file with a language suffix containing the translated messages.
-    // key1 : message1,
-};
-
-var wlInitOptions = {
-    // Options to initialize with the WL.Client object.
-    // For initialization options please refer to IBM MobileFirst Platform Foundation Knowledge Center.
-};
+var Messages = {};
+var wlInitOptions = {};
 
 //***************************************************
 // wlCommonInit
 // - Called automatically after MFP framework initialization by WL.Client.init(wlInitOptions).
 //***************************************************
 function wlCommonInit(){
-  document.getElementById("JsToJsButton").addEventListener("click", getCurrenciesList_JsToJs, false);
-  document.getElementById("JavaToJsButton").addEventListener("click", getCurrenciesList_JavaToJS, false);
-  document.getElementById("JavaToJavaButton").addEventListener("click", getCurrenciesList_JavaToJava, false);
+  document.getElementById("JsToJsButton").addEventListener("click", function(){ getCurrenciesList("JsToJs"); }, false);
+  document.getElementById("JavaToJsButton").addEventListener("click", function(){ getCurrenciesList("JavaToJs"); }, false);
+  document.getElementById("JavaToJavaButton").addEventListener("click", function(){ getCurrenciesList("JavaToJava"); }, false);
   document.getElementById("calculate").addEventListener("click", calculate, false);
-  getCurrenciesList_JsToJs();
+  getCurrenciesList("JsToJs");
 }
 
 //***************************************************
-// getCurrenciesList_JsToJs
+// getCurrenciesList
 //***************************************************
-function getCurrenciesList_JsToJs(){
-  var resourceRequest = new WLResourceRequest("/adapters/SQLAdapterJS/getCurrenciesList", WLResourceRequest.GET, 3000);
-  resourceRequest.send()
-  .then(
-    function(response){
-		var resultSet = response.responseJSON.resultSet;
-  		if (resultSet.length == 0)
-			alert("resultSet is empty");
-		else {
-			currenciesList = resultSet;
-			fillCurrenciesLists();
-		}
-	},
-    function(errorResponse){
-		alert("getListFailure\n"+ JSON.stringify(errorResponse));
+function getCurrenciesList(flow){
+	CURRENT_FLOW = flow;
+	switchButtonsFocus(CURRENT_FLOW);
+	if(CURRENT_FLOW == "JsToJs"){
+		var resourceRequest = new WLResourceRequest("/adapters/SQLAdapterJS/getCurrenciesList", WLResourceRequest.GET, 3000);
 	}
-  );
-  switchButtonsFocus("JsToJsButton");
-}
-
-//***************************************************
-// getCurrenciesList_JavaToJS
-//***************************************************
-function getCurrenciesList_JavaToJS(){
-	alert("getCurrenciesList_JavaToJS");
-}
-
-//***************************************************
-// getCurrenciesList_JavaToJava
-//***************************************************
-function getCurrenciesList_JavaToJava(){
-	var resourceRequest = new WLResourceRequest("/adapters/SQLAdapterJava/getCurrenciesList_JavaToJava", WLResourceRequest.GET, 3000);
+	else {
+		var resourceRequest = new WLResourceRequest("/adapters/SQLAdapterJava/getCurrenciesList", WLResourceRequest.GET, 3000);
+	}	  
   	resourceRequest.send().then(
     	function(response){
-			var resultSet = response.responseJSON;
+			if(CURRENT_FLOW == "JsToJs"){
+				var resultSet = response.responseJSON.resultSet;
+			}
+			else {
+				var resultSet = response.responseJSON;
+			}
   			if (resultSet.length == 0)
-				alert("response is empty");
+				alert("resultSet is empty");
 			else {
 				currenciesList = resultSet;
 				fillCurrenciesLists();
@@ -89,7 +67,6 @@ function getCurrenciesList_JavaToJava(){
 			alert("getListFailure\n"+ JSON.stringify(errorResponse));
 		}
   	);
-  	switchButtonsFocus("JavaToJavaButton");
 }
 
 //***************************************************
@@ -123,11 +100,19 @@ function calculate(){
 		alert("Please enter a valid amount");
 	}
 	else {
+		// Java Adapter -> Java Adapter
 		if(CURRENT_FLOW == "JavaToJava") {
 			var resourceRequest = new WLResourceRequest("/adapters/SQLAdapterJava/getExchangeRate_JavaToJava", WLResourceRequest.GET, 3000);
 			resourceRequest.setQueryParameter("fromCurrencyId", fromCurrencyId);
 			resourceRequest.setQueryParameter("toCurrencyId", toCurrencyId);
 		}
+		// Java Adapter -> JS Adapter
+		else if(CURRENT_FLOW == "JavaToJS") {
+			var resourceRequest = new WLResourceRequest("/adapters/SQLAdapterJava/getExchangeRate_JavaToJS", WLResourceRequest.GET, 3000);
+			resourceRequest.setQueryParameter("fromCurrencyId", fromCurrencyId);
+			resourceRequest.setQueryParameter("toCurrencyId", toCurrencyId);
+		}
+		// JS Adapter -> JS Adapter
 		else {
 			var resourceRequest = new WLResourceRequest("/adapters/SQLAdapterJS/getExchangeRate", WLResourceRequest.GET, 3000);
 			resourceRequest.setQueryParameter("params", "['"+ fromCurrencyId +"','"+ toCurrencyId +"']");
@@ -153,9 +138,12 @@ function calculate(){
 //***************************************************
 /* This function changes the current button color to indicate the current adapter mashup */
 function switchButtonsFocus(ButtonId){
-    /* JS -> JS */
-	if(ButtonId == "JsToJsButton"){
-		CURRENT_FLOW = "JsToJs";
+	document.getElementById("resultDiv").innerHTML = "";
+	document.getElementById("amount").value = "1";
+	
+    // JS Adapter -> JS Adapter
+	if(ButtonId == "JsToJs"){
+		//CURRENT_FLOW = "JsToJs";
     	if($('#JsToJsButton').hasClass("AdapterTypeButton")){
     		$('#JsToJsButton').removeClass("AdapterTypeButton").addClass("AdapterTypeButtonSelected");
     	}
@@ -166,9 +154,10 @@ function switchButtonsFocus(ButtonId){
     		$('#JavaToJavaButton').removeClass("AdapterTypeButtonSelected").addClass("AdapterTypeButton");
     	}
     }
-	/* Java -> JS */
-    else if(ButtonId == "JavaToJsButton"){
-		CURRENT_FLOW = "JavaToJS";
+	
+	// Java Adapter -> JS Adapter
+    else if(ButtonId == "JavaToJs"){
+		//CURRENT_FLOW = "JavaToJS";
     	if($('#JavaToJsButton').hasClass("AdapterTypeButton")){
     		$('#JavaToJsButton').removeClass("AdapterTypeButton").addClass("AdapterTypeButtonSelected");
     	}
@@ -179,9 +168,10 @@ function switchButtonsFocus(ButtonId){
     		$('#JavaToJavaButton').removeClass("AdapterTypeButtonSelected").addClass("AdapterTypeButton");
     	}
     }
-	/* Java -> Java */
-    else if(ButtonId == "JavaToJavaButton"){
-		CURRENT_FLOW = "JavaToJava";
+	
+	// Java Adapter -> Java Adapter
+    else if(ButtonId == "JavaToJava"){
+		//CURRENT_FLOW = "JavaToJava";
     	if($('#JavaToJavaButton').hasClass("AdapterTypeButton")){
     		$('#JavaToJavaButton').removeClass("AdapterTypeButton").addClass("AdapterTypeButtonSelected");
     	}
