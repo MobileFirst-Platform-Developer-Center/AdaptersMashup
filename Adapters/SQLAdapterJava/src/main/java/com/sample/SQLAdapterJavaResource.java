@@ -26,8 +26,10 @@ import org.apache.http.client.methods.HttpUriRequest;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
+import javax.ws.rs.core.MediaType;
 import java.io.IOException;
 import java.net.URLEncoder;
 import java.sql.Connection;
@@ -51,8 +53,9 @@ public class SQLAdapterJavaResource {
 	}
 
 	@GET
+	@Produces(MediaType.APPLICATION_JSON)
 	@Path("/getCurrenciesList")
-	public String getCurrenciesList() throws SQLException, IOException {
+	public JSONArray getCurrenciesList() throws SQLException, IOException {
 		JSONArray jsonArr = new JSONArray();
 
 		Connection conn = getSQLConnection();
@@ -70,7 +73,7 @@ public class SQLAdapterJavaResource {
 		}
 		rs.close();
 		conn.close();
-		return jsonArr.toString();
+		return jsonArr;
 	}
 
 	private String getCurrencySymbol(Integer currency_id) throws SQLException, IOException {
@@ -88,8 +91,9 @@ public class SQLAdapterJavaResource {
 	}
 
 	@GET
+	@Produces(MediaType.APPLICATION_JSON)
 	@Path("/getExchangeRate_JavaToJava")
-	public String getExchangeRate_JavaToJava(@QueryParam("fromCurrencyId") Integer fromCurrencyId, @QueryParam("toCurrencyId") Integer toCurrencyId) throws SQLException, IOException{
+	public JSONObject getExchangeRate_JavaToJava(@QueryParam("fromCurrencyId") Integer fromCurrencyId, @QueryParam("toCurrencyId") Integer toCurrencyId) throws SQLException, IOException{
 		String base = getCurrencySymbol(fromCurrencyId);
 		String exchangeTo = getCurrencySymbol(toCurrencyId);
 		Double ExchangeRate = null;
@@ -112,12 +116,13 @@ public class SQLAdapterJavaResource {
 		jsonObj.put("target", exchangeTo);
 		jsonObj.put("exchangeRate", ExchangeRate);
 
-		return jsonObj.toString();
+		return jsonObj;
 	}
 
 	@GET
+	@Produces(MediaType.APPLICATION_JSON)
 	@Path("/getExchangeRate_JavaToJS")
-	public String getExchangeRate_JavaToJS(@QueryParam("fromCurrencyId") Integer fromCurrencyId, @QueryParam("toCurrencyId") Integer toCurrencyId) throws SQLException, IOException{
+	public JSONObject getExchangeRate_JavaToJS(@QueryParam("fromCurrencyId") Integer fromCurrencyId, @QueryParam("toCurrencyId") Integer toCurrencyId) throws SQLException, IOException{
 		String base = getCurrencySymbol(fromCurrencyId);
 		String exchangeTo = getCurrencySymbol(toCurrencyId);
 		Double ExchangeRate = null;
@@ -138,6 +143,6 @@ public class SQLAdapterJavaResource {
 		jsonObj.put("target", exchangeTo);
 		jsonObj.put("exchangeRate", ExchangeRate);
 
-		return jsonObj.toString();
+		return jsonObj;
 	}
 }
