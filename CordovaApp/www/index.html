@@ -24,7 +24,6 @@ limitations under the License.
         <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width">
         <link rel="stylesheet" type="text/css" href="css/index.css">
         <title>Adapters Mashup</title>
-        <script src="js/jquery-1.11.3.min.js"></script>
         <script src="cordova.js"></script>
         <script src="js/index.js"></script>
     </head>
@@ -41,7 +40,11 @@ limitations under the License.
                 <div id="ToCurrencyDiv"><span id="ConvertToSpanLabel">To:</span> <select id="toCurrencyList"></select></div>
                 <p align="center"><button id="calculate">Calculate</button></p>
             </div>
-            <div id="resultDiv"></div>
+            <div id="resultDiv">
+                <span id="fromAmount"></span> <span id="fromSymbol"></span>
+                <span id="resultDivLineSeperator"></span>
+                <span id="toAmount"></span> <span id="toSymbol"></span>              
+            </div>
             <div align="center">
                 <button id="JsToJsButton" class="AdapterTypeButton">JS adapter -> JS adapter</button>
                 <button id="JavaToJsButton" class="AdapterTypeButton">Java adapter -> JS adapter</button>
