@@ -123,7 +123,7 @@ function calculate() {
             function(response) {
                 var exchangeRate = response.responseJSON.exchangeRate;
                 var total = parseFloat(exchangeRate) * parseFloat(amount);
-                fillResultDiv(amount, response.responseJSON.base, "<br \/>=<br \/>", total.toFixed(2), response.responseJSON.target);
+                fillResultDiv(amount, response.responseJSON.base, "visible", total.toFixed(2), response.responseJSON.target);
             },
             // Failure
             function(errorResponse) {
@@ -137,7 +137,7 @@ function calculate() {
 //***************************************************
 /* This function changes the current button color to indicate the current adapter mashup */
 function switchButtonsFocus() {
-    fillResultDiv("", "", "", "", ""); // Clear previous results
+    fillResultDiv("", "", "hidden", "", ""); // Clear previous results
     document.getElementById("amount").value = "1"; // Reset the amount text field to 1
 
     // JS Adapter -> JS Adapter
@@ -165,10 +165,11 @@ function switchButtonsFocus() {
 //***************************************************
 // fillResultDiv
 //***************************************************
-function fillResultDiv(amount, from_symbol, seperator, to_amount, to_symbol){
+function fillResultDiv(amount, from_symbol, seperatorVisibility, to_amount, to_symbol){
     document.getElementById("fromAmount").innerHTML = amount;
     document.getElementById("fromSymbol").innerHTML = from_symbol;
-    document.getElementById("resultDivLineSeperator").innerHTML = seperator;
+    //document.getElementById("resultDivLineSeperator").innerHTML = seperator;
+    document.getElementById("resultDivLineSeperator").style.visibility = seperatorVisibility;
     document.getElementById("toAmount").innerHTML = to_amount;
     document.getElementById("toSymbol").innerHTML = to_symbol;
 }

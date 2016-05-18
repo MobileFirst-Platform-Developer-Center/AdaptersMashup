@@ -113,3 +113,8 @@ button:focus {
 	text-align: center;
 	font-size: 18px;
 }
+
+#resultDivLineSeperator {
+	visibility: hidden;
+}
+
