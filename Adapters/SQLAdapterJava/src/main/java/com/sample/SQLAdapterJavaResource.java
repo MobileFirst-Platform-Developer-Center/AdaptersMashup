@@ -62,7 +62,7 @@ public class SQLAdapterJavaResource {
 		PreparedStatement getAllCities = conn.prepareStatement("select id, symbol, name from currencies");
 		ResultSet rs = getAllCities.executeQuery();
 		while (rs.next()) {
-			/* Putting the current city results in a JSONObject */
+			/* Putting the currency info in a JSONObject */
 			JSONObject jsonObj = new JSONObject();
 			jsonObj.put("id", rs.getString("id"));
 			jsonObj.put("symbol", rs.getString("symbol"));
