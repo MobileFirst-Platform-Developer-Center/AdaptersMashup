@@ -102,7 +102,6 @@ public class SQLAdapterJavaResource {
 			ExchangeRate = 1.0;
 		}
 		else{
-			//ExchangeRate = 2.0;
 			String getFixerIOInfoProcedureURL = "/HTTPAdapterJava?fromCurrency="+ URLEncoder.encode(base, "UTF-8") +"&toCurrency="+ URLEncoder.encode(exchangeTo, "UTF-8");
 			HttpUriRequest req = new HttpGet(getFixerIOInfoProcedureURL);
 			HttpResponse response = adaptersAPI.executeAdapterRequest(req);
