@@ -168,7 +168,6 @@ function switchButtonsFocus() {
 function fillResultDiv(amount, from_symbol, seperatorVisibility, to_amount, to_symbol){
     document.getElementById("fromAmount").innerHTML = amount;
     document.getElementById("fromSymbol").innerHTML = from_symbol;
-    //document.getElementById("resultDivLineSeperator").innerHTML = seperator;
     document.getElementById("resultDivLineSeperator").style.visibility = seperatorVisibility;
     document.getElementById("toAmount").innerHTML = to_amount;
     document.getElementById("toSymbol").innerHTML = to_symbol;
