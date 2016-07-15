@@ -59,14 +59,14 @@ function getCurrenciesList(flow) {
         function(response) {
             currenciesList = response.responseJSON;
             if (currenciesList.length === 0)
-                alert("currenciesList is empty");
+                navigator.notification.alert("currenciesList is empty");
             else {
                 fillCurrenciesLists();
             }
         },
         // Failure
         function(errorResponse) {
-            alert("getListFailure\n" + JSON.stringify(errorResponse));
+            navigator.notification.alert("getListFailure\n" + JSON.stringify(errorResponse));
         }
     );
 }
@@ -98,7 +98,7 @@ function calculate() {
     var amount = document.getElementById("amount").value;
 
     if (amount === null || amount === "" || isNaN(amount)) {
-        alert("Please enter a valid amount");
+        navigator.notification.alert("Please enter a valid amount");
     } else {
         var resourceRequest;
         // Java Adapter -> Java Adapter
@@ -127,7 +127,7 @@ function calculate() {
             },
             // Failure
             function(errorResponse) {
-                alert("getExchangeRate Failure\n" + JSON.stringify(errorResponse));
+                navigator.notification.alert("getExchangeRate Failure\n" + JSON.stringify(errorResponse));
             });
     }
 }
